@@ -1,5 +1,5 @@
 ﻿using Core.Domain;
-using Core.DomainService;
+using Core.DomainService.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

@@ -125,7 +125,8 @@ namespace Infrastructure.RL.Migrations
                         column: x => x.UserEmail,
                         principalTable: "Users",
                         principalColumn: "Email",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction,
+                        onUpdate: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateIndex(

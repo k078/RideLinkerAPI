@@ -9,8 +9,8 @@ namespace Core.Domain
     public class Trip
     {
         public int Id { get; set; }
-        public string? Departure { get; set; }
-        public string? Destination { get; set; }
+        public Location? Departure { get; set; }
+        public Location? Destination { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public int DriverId { get; set; }

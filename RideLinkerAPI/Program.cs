@@ -2,11 +2,13 @@ using Microsoft.EntityFrameworkCore;
 using Infrastructure.RL;
 using Core.DomainService;
 using Core.Domain;
+using Core.DomainService.Interfaces;
+using Core.DomainService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//builder.Services.AddScoped<CarService>();
-
+builder.Services.AddScoped<ICarRepository, CarRepository>();
+builder.Services.AddScoped<ICarService, CarService>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -18,6 +20,7 @@ builder.Services.AddControllers();
 var app = builder.Build();
 
 app.UseHttpsRedirection();
+//app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();

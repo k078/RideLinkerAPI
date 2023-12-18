@@ -4,6 +4,7 @@ using Infrastructure.RL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.RL.Migrations
 {
     [DbContext(typeof(RideLinkerDbContext))]
-    partial class RideLinkerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231218143614_init nog een keer")]
+    partial class initnogeenkeer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -63,7 +66,17 @@ namespace Infrastructure.RL.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("TripId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserEmail")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("TripId");
+
+                    b.HasIndex("UserEmail");
 
                     b.ToTable("Locations");
                 });
@@ -106,11 +119,11 @@ namespace Infrastructure.RL.Migrations
                     b.Property<int>("CarId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("DepartureId")
-                        .HasColumnType("int");
+                    b.Property<string>("Departure")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("DestinationId")
-                        .HasColumnType("int");
+                    b.Property<string>("Destination")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DriverEmail")
                         .IsRequired()
@@ -128,10 +141,6 @@ namespace Infrastructure.RL.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CarId");
-
-                    b.HasIndex("DepartureId");
-
-                    b.HasIndex("DestinationId");
 
                     b.HasIndex("DriverEmail");
 
@@ -177,6 +186,21 @@ namespace Infrastructure.RL.Migrations
                     b.Navigation("Location");
                 });
 
+            modelBuilder.Entity("Core.Domain.Location", b =>
+                {
+                    b.HasOne("Core.Domain.Trip", "Trip")
+                        .WithMany()
+                        .HasForeignKey("TripId");
+
+                    b.HasOne("Core.Domain.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserEmail");
+
+                    b.Navigation("Trip");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Core.Domain.Reservation", b =>
                 {
                     b.HasOne("Core.Domain.Trip", null)
@@ -200,14 +224,6 @@ namespace Infrastructure.RL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Domain.Location", "Departure")
-                        .WithMany()
-                        .HasForeignKey("DepartureId");
-
-                    b.HasOne("Core.Domain.Location", "Destination")
-                        .WithMany()
-                        .HasForeignKey("DestinationId");
-
                     b.HasOne("Core.Domain.User", "Driver")
                         .WithMany("TripsAsDriver")
                         .HasForeignKey("DriverEmail")
@@ -215,10 +231,6 @@ namespace Infrastructure.RL.Migrations
                         .IsRequired();
 
                     b.Navigation("Car");
-
-                    b.Navigation("Departure");
-
-                    b.Navigation("Destination");
 
                     b.Navigation("Driver");
                 });
