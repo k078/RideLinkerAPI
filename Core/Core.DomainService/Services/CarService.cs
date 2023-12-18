@@ -31,5 +31,15 @@ namespace Core.DomainService.Services
         {
            return _repo.GetByIdAsync(id);
         }
+
+        public Task UpdateAsync(Car car)
+        {
+            return _repo.UpdateAsync(car);
+        }
+
+        public Task DeleteAsync(int id)
+        {
+            return _repo.DeleteAsync(id);
+        }
     }
 }

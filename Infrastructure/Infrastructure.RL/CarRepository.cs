@@ -6,16 +6,19 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Core.DomainService.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.RL
 {
     public class CarRepository : ICarRepository
     {
         private readonly RideLinkerDbContext _context;
+        private readonly ILogger<CarRepository> _logger;
 
-        public CarRepository(RideLinkerDbContext context)
+        public CarRepository(RideLinkerDbContext context, ILogger<CarRepository> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public async Task<Car> GetByIdAsync(int id)
@@ -36,19 +39,26 @@ namespace Infrastructure.RL
 
         public async Task UpdateAsync(Car car)
         {
-            _context.Cars.Update(car);
-            await _context.SaveChangesAsync();
+            var carToUpdate = await _context.Cars.FindAsync(car.Id);
+
+            _logger.LogInformation("Updating car with id: " + car.Id);
+
+            if (carToUpdate != null)
+            {
+                _context.Entry(carToUpdate).CurrentValues.SetValues(car);
+                await _context.SaveChangesAsync();
+            }
         }
 
-        public async Task DeleteAsync(Car car)
+        public async Task DeleteAsync(int id)
         {
-            _context.Cars.Remove(car);
-            await _context.SaveChangesAsync();
-        }
+            var carToDelete = await _context.Cars.FindAsync(id);
 
-        public Task DeleteAsync(int id)
-        {
-            throw new NotImplementedException();
+            if (carToDelete != null)
+            {
+                _context.Cars.Remove(carToDelete);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }
