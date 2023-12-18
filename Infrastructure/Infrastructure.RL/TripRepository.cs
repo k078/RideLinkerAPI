@@ -1,4 +1,6 @@
 ﻿using Core.Domain;
+using Core.DomainService;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +11,9 @@ namespace Infrastructure.RL
 {
     public class TripRepository : ITripRepository
     {
-        private readonly YourDbContext _context;
+        private readonly RideLinkerDbContext _context;
 
-        public TripRepository(YourDbContext context)
+        public TripRepository(RideLinkerDbContext context)
         {
             _context = context;
         }

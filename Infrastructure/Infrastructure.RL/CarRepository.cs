@@ -4,14 +4,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Core.DomainService;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.RL
 {
     public class CarRepository : ICarRepository
     {
-        private readonly YourDbContext _context;
+        private readonly RideLinkerDbContext _context;
 
-        public CarRepository(YourDbContext context)
+        public CarRepository(RideLinkerDbContext context)
         {
             _context = context;
         }
@@ -42,6 +44,11 @@ namespace Infrastructure.RL
         {
             _context.Cars.Remove(car);
             await _context.SaveChangesAsync();
+        }
+
+        public Task DeleteAsync(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

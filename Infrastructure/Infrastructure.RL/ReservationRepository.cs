@@ -1,4 +1,6 @@
 ﻿using Core.Domain;
+using Core.DomainService;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.RL
 {
-    public class ReservationRepository
+    public class ReservationRepository : IReservationRepository
     {
-        private readonly YourDbContext _context;
+        private readonly RideLinkerDbContext _context;
 
-        public ReservationRepository(YourDbContext context)
+        public ReservationRepository(RideLinkerDbContext context)
         {
             _context = context;
         }

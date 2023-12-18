@@ -1,5 +1,6 @@
 ﻿using Core.Domain;
 using Core.DomainService;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,9 @@ namespace Infrastructure.RL
 {
     public class UserRepository : IUserRepository
     {
-        private readonly YourDbContext _context;
+        private readonly RideLinkerDbContext _context;
 
-        public UserRepository(YourDbContext context)
+        public UserRepository(RideLinkerDbContext context)
         {
             _context = context;
         }
@@ -45,3 +46,4 @@ namespace Infrastructure.RL
             await _context.SaveChangesAsync();
         }
     }
+}
