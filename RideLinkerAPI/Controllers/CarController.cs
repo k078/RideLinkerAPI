@@ -79,9 +79,22 @@ namespace RideLinkerAPI.Controllers
 
             updatedCar.Id = id;
 
-            await _carService.UpdateAsync(updatedCar);
+            try
+            {
+                 await _carService.UpdateAsync(updatedCar);
 
-            return Ok(updatedCar);
+                if (updatedCar == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(updatedCar);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Fout bij het bijwerken van auto: {ex.Message}");
+                return StatusCode(500, "Er is een interne fout opgetreden bij het bijwerken van een auto.");
+            }
         }
 
         [HttpDelete("{id}")]
