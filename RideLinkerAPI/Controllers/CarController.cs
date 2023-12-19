@@ -34,59 +34,84 @@ namespace RideLinkerAPI.Controllers
             }
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetCarById(int id)
+        {
+            _logger.LogInformation($"GetCarById({id}) aangeroepen");
+            var car = await _carService.GetByIdAsync(id);
 
-        //[HttpGet("{id}")]
-        //public IActionResult GetCarById(int id)
-        //{
-        //    _logger.LogInformation($"GetCarById({id}) aangeroepen");
-        //    var car = _carService.GetCarById(id);
+            if (car == null)
+            {
+                _logger.LogError($"Auto met id {id} niet gevonden");
+                return NotFound();
+            }
 
-        //    if (car == null)
-        //    {
-        //        return NotFound();
-        //    }
+            return Ok(car);
+        }
 
-        //    return Ok(car);
-        //}
 
-        [HttpPost]
-        public IActionResult AddCar([FromBody] Car newCar)
+        [HttpPost()]
+        public async Task<IActionResult> AddCar([FromBody] Car inCar)
         {
             _logger.LogInformation("AddCar() aangeroepen");
 
-            if (newCar == null)
+            try
+            {
+                await _carService.AddAsync(inCar);
+                return Ok(inCar);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Fout bij het toevoegen van een auto: {ex.Message}");
+                return StatusCode(500, "Er is een interne fout opgetreden bij het toevoegen van een auto.");
+            }
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateCar(int id, [FromBody] Car updatedCar)
+        {
+            _logger.LogInformation($"UpdateCar({id}) aangeroepen");
+
+            if (updatedCar == null)
             {
                 return BadRequest();
             }
 
-            _carService.AddAsync(newCar);
+            updatedCar.Id = id;
 
-            return Ok();
+            try
+            {
+                 await _carService.UpdateAsync(updatedCar);
+
+                if (updatedCar == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(updatedCar);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Fout bij het bijwerken van auto: {ex.Message}");
+                return StatusCode(500, "Er is een interne fout opgetreden bij het bijwerken van een auto.");
+            }
         }
 
-        ////[HttpPut("{id}")]
-        ////public IActionResult UpdateCar(int id, [FromBody] Car updatedCar)
-        ////{
-        ////    _logger.LogInformation($"UpdateCar({id}) aangeroepen");
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCar(int id)
+        {
+            _logger.LogInformation($"DeleteCar({id}) aangeroepen");
 
-        ////    if (updatedCar == null)
-        ////    {
-        ////        return BadRequest();
-        ////    }
-
-        ////    _carService.UpdateCar(id, updatedCar);
-
-        ////    return NoContent();
-        ////}
-
-        //[HttpDelete("{id}")]
-        //public IActionResult DeleteCar(int id)
-        //{
-        //    _logger.LogInformation($"DeleteCar({id}) aangeroepen");
-
-        //    _carService.DeleteCar(id);
-
-        //    return NoContent();
-        //}
+            try
+            {
+                await _carService.DeleteAsync(id);
+                return Ok("Auto ID gedelete: " + id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Fout bij het verwijderen van de auto: {ex.Message}");
+                return StatusCode(500, "Er is een interne fout opgetreden bij het verwijderen van de auto.");
+            }
+        }
     }
 }

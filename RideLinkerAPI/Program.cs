@@ -9,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<ICarRepository, CarRepository>();
 builder.Services.AddScoped<ICarService, CarService>();
+builder.Services.AddScoped<ITripRepository, TripRepository>();  
+builder.Services.AddScoped<ITripService, TripService>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 

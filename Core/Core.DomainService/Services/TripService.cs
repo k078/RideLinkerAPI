@@ -8,33 +8,33 @@ using System.Threading.Tasks;
 
 namespace Core.DomainService.Services
 {
-    public class CarService : ICarService
+    public class TripService : ITripService
     {
-        private readonly ICarRepository _repo;
-        
-        public CarService(ICarRepository repo)
+        private readonly ITripRepository _repo;
+
+        public TripService(ITripRepository repo)
         {
             _repo = repo;
         }
 
 
-        public Task<IEnumerable<Car>> GetAllAsync()
+        public Task<IEnumerable<Trip>> GetAllAsync()
         {
             return _repo.GetAllAsync();
         }
 
-        public Task<Car> GetByIdAsync(int id)
+        public Task<Trip> GetByIdAsync(int id)
         {
-           return _repo.GetByIdAsync(id);
+            return _repo.GetByIdAsync(id);
         }
-        public Task AddAsync(Car car)
+        public Task AddAsync(Trip trip)
         {
-            return _repo.AddAsync(car);
+            return _repo.AddAsync(trip);
         }
 
-        public Task UpdateAsync(Car car)
+        public Task UpdateAsync(Trip trip)
         {
-            return _repo.UpdateAsync(car);
+            return _repo.UpdateAsync(trip);
         }
 
         public Task DeleteAsync(int id)
