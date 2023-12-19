@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Core.DomainService.Interfaces
 {
-    public interface ITripRepository
+    public interface ITripService
     {
         Task<Trip> GetByIdAsync(int id);
         Task<IEnumerable<Trip>> GetAllAsync();

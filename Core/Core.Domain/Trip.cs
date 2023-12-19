@@ -14,6 +14,7 @@ namespace Core.Domain
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public int DriverId { get; set; }
+        public string DriverEmail { get; set; }
         public int CarId { get; set; }
         public Car? Car { get; set; }
         public User? Driver { get; set; }
