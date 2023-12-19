@@ -27,8 +27,8 @@ builder.Services.AddDbContext<AppIdentityDbContext>(options =>
 });
 
 builder.Services.AddIdentity<User, IdentityRole>()
-    .AddEntityFrameworkStores<AppIdentityDbContext>()
-    .AddDefaultTokenProviders();
+    .AddEntityFrameworkStores<AppIdentityDbContext>();
+
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var key = Encoding.ASCII.GetBytes(jwtSettings["Secret"]);

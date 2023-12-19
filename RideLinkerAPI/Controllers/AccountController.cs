@@ -32,48 +32,65 @@ namespace RideLinkerAPI.Controllers
         {
             _logger.LogInformation($"Login attempt for email: {model.Email}");
 
-            var user = await _userManager.FindByEmailAsync(model.Email.Normalize());
-
-            if (user == null)
+            try
             {
-                _logger.LogWarning($"User not found for email: {model.Email}");
-                return BadRequest("Invalid login attempt.");
+                if (ModelState.IsValid)
+                {
+                    var result = await _signInManager.PasswordSignInAsync(
+                        model.Email,
+                        model.Password,
+                        false,
+                        false
+                    );
+
+                    if (result.Succeeded)
+                    {
+                        return Ok(result);
+                    }
+
+                    _logger.LogWarning($"Invalid login attempt for email: {model.Email}");
+                    return BadRequest("Invalid login attempt.");
+                }
+
+                _logger.LogWarning($"Invalid model state for login attempt for email: {model.Email}");
+                return BadRequest("Invalid model state.");
             }
-
-            _logger.LogInformation($"User found for email: {model.Email}, UserId: {user.Id}");
-
-            var result = await _signInManager.PasswordSignInAsync(user, model.Password, false, false);
-
-            if (result.Succeeded)
+            catch (Exception ex)
             {
-                var token = GenerateJwtToken(user);
-                _logger.LogInformation("Login successful.");
-                return Ok(new { Token = token });
+                _logger.LogError($"An error occurred during login: {ex.Message}");
+                return StatusCode(500, "An internal server error occurred.");
             }
-
-            _logger.LogWarning($"Invalid login attempt for email: {model.Email}");
-            return BadRequest("Invalid login attempt.");
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
-            var user = new User
+            _logger.LogInformation($"Register attempt for email: {model.Email}");
+
+            if (ModelState.IsValid)
             {
-                UserName = model.Email,
-                Email = model.Email,
-            };
+                   var user = new User
+                   {
+                    UserName = model.Email,
+                    Email = model.Email
+                };
 
-            var result = await _userManager.CreateAsync(user, model.Password);
+                var result = await _userManager.CreateAsync(user, model.Password);
 
-            if (result.Succeeded)
-            {
-                await _signInManager.SignInAsync(user, isPersistent: false);
+                if(result.Succeeded)
+                {
+                    await _signInManager.SignInAsync(user, false);
+                    return Ok("Account registered.");
+                }
 
-                return Ok(new { Message = "Registration successful." });
+                foreach(var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+                return BadRequest(ModelState);
             }
 
-            return BadRequest(result.Errors);
+            return BadRequest("Invalid registration attempt.");
         }
 
         [HttpPost("logout")]
@@ -89,7 +106,6 @@ namespace RideLinkerAPI.Controllers
         {
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim(ClaimTypes.Name, user.Email)
-            // Voeg hier andere aangepaste claims toe op basis van je gebruikersmodel
         };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:Secret"]));
