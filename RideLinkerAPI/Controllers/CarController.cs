@@ -49,19 +49,22 @@ namespace RideLinkerAPI.Controllers
             return Ok(car);
         }
 
-        [HttpPost]
-        public IActionResult AddCar([FromBody] Car newCar)
+
+        [HttpPost()]
+        public async Task<IActionResult> AddCar([FromBody] Car inCar)
         {
             _logger.LogInformation("AddCar() aangeroepen");
 
-            if (newCar == null)
+            try
             {
-                return BadRequest();
+                await _carService.AddAsync(inCar);
+                return Ok(inCar);
             }
-
-             _carService.AddAsync(newCar);
-
-            return Ok(newCar);
+            catch (Exception ex)
+            {
+                _logger.LogError($"Fout bij het toevoegen van een auto: {ex.Message}");
+                return StatusCode(500, "Er is een interne fout opgetreden bij het toevoegen van een auto.");
+            }
         }
 
         [HttpPut("{id}")]
@@ -78,7 +81,7 @@ namespace RideLinkerAPI.Controllers
 
             await _carService.UpdateAsync(updatedCar);
 
-            return Ok("Geupdate auto: " + updatedCar);
+            return Ok(updatedCar);
         }
 
         [HttpDelete("{id}")]

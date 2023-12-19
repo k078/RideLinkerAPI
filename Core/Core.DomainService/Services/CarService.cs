@@ -17,10 +17,6 @@ namespace Core.DomainService.Services
             _repo = repo;
         }
 
-        public Task AddAsync(Car car)
-        {
-            return _repo.AddAsync(car);
-        }
 
         public Task<IEnumerable<Car>> GetAllAsync()
         {
@@ -30,6 +26,10 @@ namespace Core.DomainService.Services
         public Task<Car> GetByIdAsync(int id)
         {
            return _repo.GetByIdAsync(id);
+        }
+        public Task AddAsync(Car car)
+        {
+            return _repo.AddAsync(car);
         }
 
         public Task UpdateAsync(Car car)
