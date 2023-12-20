@@ -23,8 +23,19 @@ builder.Services.AddDbContext<RideLinkerDbContext>(options =>
 
 builder.Services.AddControllers();
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyHeader()
+               .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
 
+app.UseCors();
 app.UseHttpsRedirection();
 //app.UseAuthentication();
 app.UseAuthorization();
