@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace Core.DomainService.Interfaces
 {
-    public interface ITripRepository
+    public interface IUserService
     {
-        Task<Trip> GetByIdAsync(int id);
-        Task<IEnumerable<Trip>> GetAllAsync();
-        Task AddAsync(Trip trip);
-        Task UpdateAsync(Trip trip);
+        Task<User> GetByIdAsync(int id);
+        Task<IEnumerable<User>> GetAllAsync();
+        Task AddAsync(User user);
+        Task UpdateAsync(User user);
         Task DeleteAsync(int id);
     }
 }

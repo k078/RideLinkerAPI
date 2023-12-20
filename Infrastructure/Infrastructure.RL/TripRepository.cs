@@ -1,6 +1,7 @@
 ﻿using Core.Domain;
 using Core.DomainService.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +13,12 @@ namespace Infrastructure.RL
     public class TripRepository : ITripRepository
     {
         private readonly RideLinkerDbContext _context;
+        private readonly ILogger<TripRepository> _logger;
 
-        public TripRepository(RideLinkerDbContext context)
+        public TripRepository(RideLinkerDbContext context, ILogger<TripRepository> logger)
         {
             _context = context;
+            _logger = logger;   
         }
 
         public async Task<Trip> GetByIdAsync(int id)
@@ -36,13 +39,19 @@ namespace Infrastructure.RL
 
         public async Task UpdateAsync(Trip trip)
         {
-            _context.Trips.Update(trip);
-            await _context.SaveChangesAsync();
-        }
+            var tripToUpdate = await _context.Trips.FindAsync(trip.Id);
 
-        public async Task DeleteAsync(Trip trip)
+            _logger.LogInformation("Updating car with id: " + trip.Id);
+
+            if (tripToUpdate != null)
+            {
+                _context.Entry(tripToUpdate).CurrentValues.SetValues(trip);
+                await _context.SaveChangesAsync();
+            }
+        }
+        public async Task DeleteAsync(int id)
         {
-            _context.Trips.Remove(trip);
+            _context.Trips.Remove(await _context.Trips.FindAsync(id));
             await _context.SaveChangesAsync();
         }
     }

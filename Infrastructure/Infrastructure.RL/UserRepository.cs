@@ -40,10 +40,16 @@ namespace Infrastructure.RL
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(User user)
+        public async Task DeleteAsync(int id)
         {
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
+            var userToDelete = await _context.Users.FindAsync(id);
+
+            if (userToDelete != null)
+            {
+                _context.Users.Remove(userToDelete);
+                await _context.SaveChangesAsync();
+            }
         }
+
     }
 }
