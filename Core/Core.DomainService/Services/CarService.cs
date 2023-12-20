@@ -17,7 +17,6 @@ namespace Core.DomainService.Services
             _repo = repo;
         }
 
-
         public Task<IEnumerable<Car>> GetAllAsync()
         {
             return _repo.GetAllAsync();
