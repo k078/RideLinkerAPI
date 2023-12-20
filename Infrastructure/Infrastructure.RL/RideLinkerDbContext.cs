@@ -35,6 +35,8 @@ namespace Infrastructure.RL
                 new Car { Id = 8, Brand = "Audi", Model = "E-tron", Image = "https://ev-database.org/img/auto/Audi_e-tron/Audi_e-tron-01@2x.jpg", Available = true, LocationId = 1 }
             );
 
+
+
             base.OnModelCreating(modelBuilder);
         }
     }
