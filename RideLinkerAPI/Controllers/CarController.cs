@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Core.Domain;
 using Core.DomainService.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RideLinkerAPI.Controllers
 {
@@ -17,7 +18,9 @@ namespace RideLinkerAPI.Controllers
             _logger = logger;
             _carService = carService;
         }
+
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAllCars()
         {
             _logger.LogInformation("GetAllCars() aangeroepen");

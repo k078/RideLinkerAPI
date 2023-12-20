@@ -45,11 +45,29 @@ namespace RideLinkerAPI.Controllers
 
                     if (result.Succeeded)
                     {
-                        return Ok(result);
-                    }
+                        var id = _userManager.GetUserId(User);
+                        var user = await _userManager.FindByIdAsync(id);
 
-                    _logger.LogWarning($"Invalid login attempt for email: {model.Email}");
-                    return BadRequest("Invalid login attempt.");
+                        _logger.LogInformation($"????????????????????model.Email is: {model.Email} ");
+                        _logger.LogInformation($"!!!!!!!!!!!!!!!!!!!!User found: {user?.Email}");
+
+
+                        if (user != null)
+                        {
+                            var token = GenerateJwtToken(user);
+                            return Ok("Login succeeded: " + result.Succeeded + new { Token = token });
+                        }
+                        else
+                        {
+                            _logger.LogError("User is null after successful login.");
+                            return StatusCode(500, "Invalid login attempt, wrong email/password combination.");
+                        }
+                    }
+                    else
+                    {
+                        _logger.LogWarning($"Invalid login attempt.");
+                        return StatusCode(500,"Invalid login attempt.");
+                    }
                 }
 
                 _logger.LogWarning($"Invalid model state for login attempt for email: {model.Email}");
