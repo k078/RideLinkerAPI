@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Core.DomainService.Interfaces
 {
-    public interface IUserRepository
+    public interface IUserService
     {
         Task<User> GetByIdAsync(int id);
         Task<IEnumerable<User>> GetAllAsync();

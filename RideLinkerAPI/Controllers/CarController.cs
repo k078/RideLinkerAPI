@@ -49,7 +49,6 @@ namespace RideLinkerAPI.Controllers
             return Ok(car);
         }
 
-
         [HttpPost()]
         public async Task<IActionResult> AddCar([FromBody] Car inCar)
         {
