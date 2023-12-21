@@ -20,12 +20,18 @@ namespace Infrastructure.RL
 
         public async Task<Reservation> GetByIdAsync(int id)
         {
-            return await _context.Reservations.FindAsync(id);
+            return await _context.Reservations
+                .Include(r => r.User)
+                .Include(r => r.Trip)
+                .FirstAsync(r => r.Id == id);
         }
 
         public async Task<IEnumerable<Reservation>> GetAllAsync()
         {
-            return await _context.Reservations.ToListAsync();
+            return await _context.Reservations
+                .Include(r => r.User)
+                .Include(r => r.Trip)
+                .ToListAsync();
         }
 
         public async Task AddAsync(Reservation reservation)

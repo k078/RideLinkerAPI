@@ -60,7 +60,6 @@ namespace RideLinkerAPI.Controllers
         public async Task<IActionResult> AddReservation([FromBody] Reservation reservation)
         {
             _logger.LogInformation("AddReservation called");
-
             try
             {
                 if (reservation == null)

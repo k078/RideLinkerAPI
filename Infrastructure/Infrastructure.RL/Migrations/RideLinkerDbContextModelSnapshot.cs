@@ -194,10 +194,6 @@ namespace Infrastructure.RL.Migrations
                     b.Property<int>("TripId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserEmail")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
@@ -205,9 +201,48 @@ namespace Infrastructure.RL.Migrations
 
                     b.HasIndex("TripId");
 
-                    b.HasIndex("UserEmail");
+                    b.HasIndex("UserId", "TripId")
+                        .IsUnique();
 
                     b.ToTable("Reservations");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            TripId = 1,
+                            UserId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            TripId = 2,
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            TripId = 3,
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 4,
+                            TripId = 4,
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 5,
+                            TripId = 5,
+                            UserId = 3
+                        },
+                        new
+                        {
+                            Id = 6,
+                            TripId = 6,
+                            UserId = 3
+                        });
                 });
 
             modelBuilder.Entity("Core.Domain.Trip", b =>
@@ -228,8 +263,7 @@ namespace Infrastructure.RL.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("DriverEmail")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("DriverId")
                         .HasColumnType("int");
@@ -248,7 +282,7 @@ namespace Infrastructure.RL.Migrations
 
                     b.HasIndex("DestinationId");
 
-                    b.HasIndex("DriverEmail");
+                    b.HasIndex("DriverId");
 
                     b.ToTable("Trips");
 
@@ -311,14 +345,18 @@ namespace Infrastructure.RL.Migrations
 
             modelBuilder.Entity("Core.Domain.User", b =>
                 {
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("MobileNr")
                         .HasColumnType("nvarchar(max)");
@@ -329,32 +367,35 @@ namespace Infrastructure.RL.Migrations
                     b.Property<int>("UserRole")
                         .HasColumnType("int");
 
-                    b.HasKey("Email");
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.ToTable("Users");
 
                     b.HasData(
                         new
                         {
-                            Email = "admin@mail.com",
-                            BirthDate = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Id = 1,
+                            BirthDate = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "admin@mail.com",
                             Name = "Admin",
                             UserRole = 0
                         },
                         new
                         {
-                            Email = "hg@mail.com",
-                            BirthDate = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Id = 2,
+                            BirthDate = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "hg@mail.com",
                             Name = "Hans Gerard",
                             UserRole = 0
                         },
                         new
                         {
-                            Email = "sten@mail.com",
-                            BirthDate = new DateTime(2000, 10, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Id = 3,
+                            BirthDate = new DateTime(2000, 10, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "sten@mail.com",
                             Name = "Sten",
                             UserRole = 1
                         });
@@ -373,17 +414,21 @@ namespace Infrastructure.RL.Migrations
 
             modelBuilder.Entity("Core.Domain.Reservation", b =>
                 {
-                    b.HasOne("Core.Domain.Trip", null)
+                    b.HasOne("Core.Domain.Trip", "Trip")
                         .WithMany("Reservations")
                         .HasForeignKey("TripId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Domain.User", null)
+                    b.HasOne("Core.Domain.User", "User")
                         .WithMany("Reservations")
-                        .HasForeignKey("UserEmail")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Trip");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Core.Domain.Trip", b =>
@@ -404,7 +449,7 @@ namespace Infrastructure.RL.Migrations
 
                     b.HasOne("Core.Domain.User", "Driver")
                         .WithMany("TripsAsDriver")
-                        .HasForeignKey("DriverEmail")
+                        .HasForeignKey("DriverId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
