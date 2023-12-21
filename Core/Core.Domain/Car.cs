@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Core.Domain
@@ -17,6 +18,7 @@ namespace Core.Domain
         public int LocationId { get; set; }
         public bool Available { get; set; }
         public Location? Location { get; set; }
+        [JsonIgnore]
         public ICollection<Trip> Trips { get; set; } = new List<Trip>();
 
     }

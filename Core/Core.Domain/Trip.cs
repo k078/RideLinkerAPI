@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Core.Domain
@@ -16,6 +17,7 @@ namespace Core.Domain
         public int DriverId { get; set; }
         public string DriverEmail { get; set; }
         public int CarId { get; set; }
+        [JsonIgnore]
         public Car? Car { get; set; }
         public User? Driver { get; set; }
         public ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
