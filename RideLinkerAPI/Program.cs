@@ -16,7 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<ICarRepository, CarRepository>();
 builder.Services.AddScoped<ICarService, CarService>();
-builder.Services.AddScoped<AccountController, AccountController>();
+//builder.Services.AddScoped<AccountController, AccountController>();
 builder.Services.AddScoped<ILocationRepository, LocationRepository>();
 builder.Services.AddScoped<ILocationService, LocationService>();
 builder.Services.AddScoped<ITripRepository, TripRepository>();  
@@ -41,8 +41,10 @@ builder.Services.AddDbContext<AppIdentityDbContext>(options =>
     options.UseSqlServer(identityConnectionString);
 });
 
-builder.Services.AddIdentity<User, IdentityRole>()
-    .AddEntityFrameworkStores<AppIdentityDbContext>();
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<AppIdentityDbContext>()
+    .AddDefaultTokenProviders();
 
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");

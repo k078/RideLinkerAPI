@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.RL.Migrations
 {
     [DbContext(typeof(RideLinkerDbContext))]
-    [Migration("20231220160848_User-Trip")]
-    partial class UserTrip
+    [Migration("20231221115226_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -317,58 +317,16 @@ namespace Infrastructure.RL.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
                     b.Property<int>("Id")
                         .HasColumnType("int");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("MobileNr")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("UserRole")
@@ -382,49 +340,25 @@ namespace Infrastructure.RL.Migrations
                         new
                         {
                             Email = "admin@mail.com",
-                            AccessFailedCount = 0,
                             BirthDate = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "6012b634-2676-4b01-bfe4-4f9a5ba69555",
-                            EmailConfirmed = false,
                             Id = 1,
-                            LockoutEnabled = false,
                             Name = "Admin",
-                            Password = "Admin1!",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "8903e35e-f013-4428-b6fe-26eac50d2274",
-                            TwoFactorEnabled = false,
                             UserRole = 0
                         },
                         new
                         {
                             Email = "hg@mail.com",
-                            AccessFailedCount = 0,
                             BirthDate = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "6f01fdfc-5816-453e-9450-c638bb6c364e",
-                            EmailConfirmed = false,
                             Id = 2,
-                            LockoutEnabled = false,
                             Name = "Hans Gerard",
-                            Password = "Password1!",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "f97f715a-67e0-4426-aee4-369d94f1ff3a",
-                            TwoFactorEnabled = false,
                             UserRole = 0
                         },
                         new
                         {
                             Email = "sten@mail.com",
-                            AccessFailedCount = 0,
                             BirthDate = new DateTime(2000, 10, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "06e7b81f-0d5f-4c50-8fbe-bcb17c0bbe35",
-                            EmailConfirmed = false,
                             Id = 3,
-                            LockoutEnabled = false,
                             Name = "Sten",
-                            Password = "Password1!",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "476bdad1-38b1-41a1-9a81-07d1cb3feac2",
-                            TwoFactorEnabled = false,
                             UserRole = 1
                         });
                 });

@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Core.Domain
 {
-    public class User : IdentityUser
+    public class User
     {
         public int Id { get; set; }
         public string? Name { get; set; }
@@ -18,7 +18,6 @@ namespace Core.Domain
 
         [Key]
         public string? Email { get; set; }
-        public string? Password { get; set; }
         public string? MobileNr { get; set; }
         public Role UserRole { get; set; }
         [JsonIgnore]
