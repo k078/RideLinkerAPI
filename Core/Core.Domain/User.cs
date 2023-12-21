@@ -16,7 +16,7 @@ namespace Core.Domain
         public int Id { get; set; }
         public string? Name { get; set; }
         public DateTime BirthDate { get; set; }
-        
+
         [EmailAddress]
         [Required]
         public string? Email { get; set; }
@@ -24,7 +24,5 @@ namespace Core.Domain
         public Role UserRole { get; set; }
         [JsonIgnore]
         public ICollection<Trip> TripsAsDriver { get; set; } = new List<Trip>();
-        public ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
-
     }
 }

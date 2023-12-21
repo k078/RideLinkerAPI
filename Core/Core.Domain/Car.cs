@@ -15,7 +15,6 @@ namespace Core.Domain
         public string? Brand { get; set; }
         public string? Model { get; set; }
         public string? Image { get; set; }
-        public int LocationId { get; set; }
         public bool Available { get; set; }
         public Location? Location { get; set; }
         [JsonIgnore]

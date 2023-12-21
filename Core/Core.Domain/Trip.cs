@@ -19,6 +19,7 @@ namespace Core.Domain
         public int DriverId { get; set; }
         public string? DriverEmail { get; set; }
         public int CarId { get; set; }
+
         [JsonIgnore]
         public Car? Car { get; set; }
         public User? Driver { get; set; }
