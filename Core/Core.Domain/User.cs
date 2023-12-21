@@ -12,11 +12,13 @@ namespace Core.Domain
 {
     public class User
     {
+        [Key]
         public int Id { get; set; }
         public string? Name { get; set; }
         public DateTime BirthDate { get; set; }
-
-        [Key]
+        
+        [EmailAddress]
+        [Required]
         public string? Email { get; set; }
         public string? MobileNr { get; set; }
         public Role UserRole { get; set; }
