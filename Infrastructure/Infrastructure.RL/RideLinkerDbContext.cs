@@ -26,21 +26,21 @@ namespace Infrastructure.RL
             );
 
             modelBuilder.Entity<Car>().HasData(
-                new Car { Id = 1, Brand = "Volkswagen", Model = "ID.3", Image = "https://dam.broekhuis.online/online/broekhuis/modelpaginas/volkswagen/image-thumb__29831__original/hero-vw-id3-mob.webp", Available=true, LocationId = 1 },
-                new Car { Id = 2, Brand = "Volkswagen", Model = "ID.3", Image = "https://dam.broekhuis.online/online/broekhuis/modelpaginas/volkswagen/image-thumb__29831__original/hero-vw-id3-mob.webp", Available = true, LocationId = 1 },
-                new Car { Id = 3, Brand = "Volkswagen", Model = "ID.3", Image = "https://dam.broekhuis.online/online/broekhuis/modelpaginas/volkswagen/image-thumb__29831__original/hero-vw-id3-mob.webp", Available = true, LocationId = 1 },
-                new Car { Id = 4, Brand = "Volkswagen", Model = "ID.3", Image = "https://dam.broekhuis.online/online/broekhuis/modelpaginas/volkswagen/image-thumb__29831__original/hero-vw-id3-mob.webp", Available = true, LocationId = 1 },
-                new Car { Id = 5, Brand = "Audi", Model = "E-tron", Image = "https://ev-database.org/img/auto/Audi_e-tron/Audi_e-tron-01@2x.jpg", Available = true, LocationId = 1 },
-                new Car { Id = 6, Brand = "Audi", Model = "E-tron", Image = "https://ev-database.org/img/auto/Audi_e-tron/Audi_e-tron-01@2x.jpg", Available = true, LocationId = 1 },
-                new Car { Id = 7, Brand = "Audi", Model = "E-tron", Image = "https://ev-database.org/img/auto/Audi_e-tron/Audi_e-tron-01@2x.jpg", Available = true, LocationId = 1 },
-                new Car { Id = 8, Brand = "Audi", Model = "E-tron", Image = "https://ev-database.org/img/auto/Audi_e-tron/Audi_e-tron-01@2x.jpg", Available = true, LocationId = 2 }
+                new Car { Id = 1, Brand = "Volkswagen", Model = "ID.3", Image = "https://dam.broekhuis.online/online/broekhuis/modelpaginas/volkswagen/image-thumb__29831__original/hero-vw-id3-mob.webp", Available=true },
+                new Car { Id = 2, Brand = "Volkswagen", Model = "ID.3", Image = "https://dam.broekhuis.online/online/broekhuis/modelpaginas/volkswagen/image-thumb__29831__original/hero-vw-id3-mob.webp", Available = true },
+                new Car { Id = 3, Brand = "Volkswagen", Model = "ID.3", Image = "https://dam.broekhuis.online/online/broekhuis/modelpaginas/volkswagen/image-thumb__29831__original/hero-vw-id3-mob.webp", Available = true },
+                new Car { Id = 4, Brand = "Volkswagen", Model = "ID.3", Image = "https://dam.broekhuis.online/online/broekhuis/modelpaginas/volkswagen/image-thumb__29831__original/hero-vw-id3-mob.webp", Available = true },
+                new Car { Id = 5, Brand = "Audi", Model = "E-tron", Image = "https://ev-database.org/img/auto/Audi_e-tron/Audi_e-tron-01@2x.jpg", Available = true },
+                new Car { Id = 6, Brand = "Audi", Model = "E-tron", Image = "https://ev-database.org/img/auto/Audi_e-tron/Audi_e-tron-01@2x.jpg", Available = true },
+                new Car { Id = 7, Brand = "Audi", Model = "E-tron", Image = "https://ev-database.org/img/auto/Audi_e-tron/Audi_e-tron-01@2x.jpg", Available = true },
+                new Car { Id = 8, Brand = "Audi", Model = "E-tron", Image = "https://ev-database.org/img/auto/Audi_e-tron/Audi_e-tron-01@2x.jpg", Available = true }
             );
 
             modelBuilder.Entity<User>().HasData(
                 new User { Id = 1, Name = "Admin", Email = "admin@mail.com", BirthDate = new DateTime(2000, 01, 01, 0, 0, 0), UserRole = Role.ADMIN },
                 new User { Id = 2, Name = "Hans Gerard", Email = "hg@mail.com", BirthDate = new DateTime(2000, 01, 01, 0, 0, 0), UserRole = Role.EMPLOYEE },
                 new User { Id = 3, Name = "Sten", Email = "sten@mail.com", BirthDate = new DateTime(2000, 10, 28, 0, 0, 0), UserRole = Role.EMPLOYEE },
-                new User { Id = 3, Name = "Kalle", Email = "kalle@mail.com", BirthDate = new DateTime(2001, 02, 01, 0, 0, 0), UserRole = Role.ADMIN }
+                new User { Id = 4, Name = "Kalle", Email = "kalle@mail.com", BirthDate = new DateTime(2001, 02, 01, 0, 0, 0), UserRole = Role.ADMIN }
             );
 
             modelBuilder.Entity<Trip>().HasData(

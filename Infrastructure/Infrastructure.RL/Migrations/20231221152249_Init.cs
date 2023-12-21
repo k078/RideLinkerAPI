@@ -31,16 +31,17 @@ namespace Infrastructure.RL.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MobileNr = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserRole = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Email);
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -52,8 +53,8 @@ namespace Infrastructure.RL.Migrations
                     Brand = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Model = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LocationId = table.Column<int>(type: "int", nullable: false),
-                    Available = table.Column<bool>(type: "bit", nullable: false)
+                    Available = table.Column<bool>(type: "bit", nullable: false),
+                    LocationId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -62,8 +63,7 @@ namespace Infrastructure.RL.Migrations
                         name: "FK_Cars_Locations_LocationId",
                         column: x => x.LocationId,
                         principalTable: "Locations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -77,7 +77,7 @@ namespace Infrastructure.RL.Migrations
                     StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CarId = table.Column<int>(type: "int", nullable: true),
-                    DriverEmail = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    DriverId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -98,10 +98,10 @@ namespace Infrastructure.RL.Migrations
                         principalTable: "Locations",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Trips_Users_DriverEmail",
-                        column: x => x.DriverEmail,
+                        name: "FK_Trips_Users_DriverId",
+                        column: x => x.DriverId,
                         principalTable: "Users",
-                        principalColumn: "Email");
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -111,8 +111,7 @@ namespace Infrastructure.RL.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    TripId = table.Column<int>(type: "int", nullable: false),
-                    UserEmail = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    TripId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -123,12 +122,21 @@ namespace Infrastructure.RL.Migrations
                         principalTable: "Trips",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Reservations_Users_UserEmail",
-                        column: x => x.UserEmail,
-                        principalTable: "Users",
-                        principalColumn: "Email",
-                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Cars",
+                columns: new[] { "Id", "Available", "Brand", "Image", "LocationId", "Model" },
+                values: new object[,]
+                {
+                    { 1, true, "Volkswagen", "https://dam.broekhuis.online/online/broekhuis/modelpaginas/volkswagen/image-thumb__29831__original/hero-vw-id3-mob.webp", null, "ID.3" },
+                    { 2, true, "Volkswagen", "https://dam.broekhuis.online/online/broekhuis/modelpaginas/volkswagen/image-thumb__29831__original/hero-vw-id3-mob.webp", null, "ID.3" },
+                    { 3, true, "Volkswagen", "https://dam.broekhuis.online/online/broekhuis/modelpaginas/volkswagen/image-thumb__29831__original/hero-vw-id3-mob.webp", null, "ID.3" },
+                    { 4, true, "Volkswagen", "https://dam.broekhuis.online/online/broekhuis/modelpaginas/volkswagen/image-thumb__29831__original/hero-vw-id3-mob.webp", null, "ID.3" },
+                    { 5, true, "Audi", "https://ev-database.org/img/auto/Audi_e-tron/Audi_e-tron-01@2x.jpg", null, "E-tron" },
+                    { 6, true, "Audi", "https://ev-database.org/img/auto/Audi_e-tron/Audi_e-tron-01@2x.jpg", null, "E-tron" },
+                    { 7, true, "Audi", "https://ev-database.org/img/auto/Audi_e-tron/Audi_e-tron-01@2x.jpg", null, "E-tron" },
+                    { 8, true, "Audi", "https://ev-database.org/img/auto/Audi_e-tron/Audi_e-tron-01@2x.jpg", null, "E-tron" }
                 });
 
             migrationBuilder.InsertData(
@@ -146,7 +154,7 @@ namespace Infrastructure.RL.Migrations
 
             migrationBuilder.InsertData(
                 table: "Trips",
-                columns: new[] { "Id", "CarId", "DepartureId", "DestinationId", "DriverEmail", "EndTime", "StartTime" },
+                columns: new[] { "Id", "CarId", "DepartureId", "DestinationId", "DriverId", "EndTime", "StartTime" },
                 values: new object[,]
                 {
                     { 1, null, null, null, null, new DateTime(2023, 12, 22, 14, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 12, 22, 12, 0, 0, 0, DateTimeKind.Unspecified) },
@@ -159,27 +167,13 @@ namespace Infrastructure.RL.Migrations
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Email", "BirthDate", "Id", "MobileNr", "Name", "UserRole" },
+                columns: new[] { "Id", "BirthDate", "Email", "MobileNr", "Name", "UserRole" },
                 values: new object[,]
                 {
-                    { "admin@mail.com", new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, null, "Admin", 0 },
-                    { "hg@mail.com", new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, null, "Hans Gerard", 0 },
-                    { "sten@mail.com", new DateTime(2000, 10, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), 3, null, "Sten", 1 }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Cars",
-                columns: new[] { "Id", "Available", "Brand", "Image", "LocationId", "Model" },
-                values: new object[,]
-                {
-                    { 1, true, "Volkswagen", "https://dam.broekhuis.online/online/broekhuis/modelpaginas/volkswagen/image-thumb__29831__original/hero-vw-id3-mob.webp", 1, "ID.3" },
-                    { 2, true, "Volkswagen", "https://dam.broekhuis.online/online/broekhuis/modelpaginas/volkswagen/image-thumb__29831__original/hero-vw-id3-mob.webp", 1, "ID.3" },
-                    { 3, true, "Volkswagen", "https://dam.broekhuis.online/online/broekhuis/modelpaginas/volkswagen/image-thumb__29831__original/hero-vw-id3-mob.webp", 1, "ID.3" },
-                    { 4, true, "Volkswagen", "https://dam.broekhuis.online/online/broekhuis/modelpaginas/volkswagen/image-thumb__29831__original/hero-vw-id3-mob.webp", 1, "ID.3" },
-                    { 5, true, "Audi", "https://ev-database.org/img/auto/Audi_e-tron/Audi_e-tron-01@2x.jpg", 1, "E-tron" },
-                    { 6, true, "Audi", "https://ev-database.org/img/auto/Audi_e-tron/Audi_e-tron-01@2x.jpg", 1, "E-tron" },
-                    { 7, true, "Audi", "https://ev-database.org/img/auto/Audi_e-tron/Audi_e-tron-01@2x.jpg", 1, "E-tron" },
-                    { 8, true, "Audi", "https://ev-database.org/img/auto/Audi_e-tron/Audi_e-tron-01@2x.jpg", 2, "E-tron" }
+                    { 1, new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "admin@mail.com", null, "Admin", 0 },
+                    { 2, new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "hg@mail.com", null, "Hans Gerard", 1 },
+                    { 3, new DateTime(2000, 10, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), "sten@mail.com", null, "Sten", 1 },
+                    { 4, new DateTime(2001, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "kalle@mail.com", null, "Kalle", 0 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -191,11 +185,6 @@ namespace Infrastructure.RL.Migrations
                 name: "IX_Reservations_TripId",
                 table: "Reservations",
                 column: "TripId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Reservations_UserEmail",
-                table: "Reservations",
-                column: "UserEmail");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Trips_CarId",
@@ -213,9 +202,9 @@ namespace Infrastructure.RL.Migrations
                 column: "DestinationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Trips_DriverEmail",
+                name: "IX_Trips_DriverId",
                 table: "Trips",
-                column: "DriverEmail");
+                column: "DriverId");
         }
 
         /// <inheritdoc />

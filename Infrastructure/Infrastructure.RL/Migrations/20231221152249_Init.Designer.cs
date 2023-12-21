@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.RL.Migrations
 {
     [DbContext(typeof(RideLinkerDbContext))]
-    [Migration("20231221150756_Init")]
+    [Migration("20231221152249_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -42,7 +42,7 @@ namespace Infrastructure.RL.Migrations
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("LocationId")
+                    b.Property<int?>("LocationId")
                         .HasColumnType("int");
 
                     b.Property<string>("Model")
@@ -61,7 +61,6 @@ namespace Infrastructure.RL.Migrations
                             Available = true,
                             Brand = "Volkswagen",
                             Image = "https://dam.broekhuis.online/online/broekhuis/modelpaginas/volkswagen/image-thumb__29831__original/hero-vw-id3-mob.webp",
-                            LocationId = 1,
                             Model = "ID.3"
                         },
                         new
@@ -70,7 +69,6 @@ namespace Infrastructure.RL.Migrations
                             Available = true,
                             Brand = "Volkswagen",
                             Image = "https://dam.broekhuis.online/online/broekhuis/modelpaginas/volkswagen/image-thumb__29831__original/hero-vw-id3-mob.webp",
-                            LocationId = 1,
                             Model = "ID.3"
                         },
                         new
@@ -79,7 +77,6 @@ namespace Infrastructure.RL.Migrations
                             Available = true,
                             Brand = "Volkswagen",
                             Image = "https://dam.broekhuis.online/online/broekhuis/modelpaginas/volkswagen/image-thumb__29831__original/hero-vw-id3-mob.webp",
-                            LocationId = 1,
                             Model = "ID.3"
                         },
                         new
@@ -88,7 +85,6 @@ namespace Infrastructure.RL.Migrations
                             Available = true,
                             Brand = "Volkswagen",
                             Image = "https://dam.broekhuis.online/online/broekhuis/modelpaginas/volkswagen/image-thumb__29831__original/hero-vw-id3-mob.webp",
-                            LocationId = 1,
                             Model = "ID.3"
                         },
                         new
@@ -97,7 +93,6 @@ namespace Infrastructure.RL.Migrations
                             Available = true,
                             Brand = "Audi",
                             Image = "https://ev-database.org/img/auto/Audi_e-tron/Audi_e-tron-01@2x.jpg",
-                            LocationId = 1,
                             Model = "E-tron"
                         },
                         new
@@ -106,7 +101,6 @@ namespace Infrastructure.RL.Migrations
                             Available = true,
                             Brand = "Audi",
                             Image = "https://ev-database.org/img/auto/Audi_e-tron/Audi_e-tron-01@2x.jpg",
-                            LocationId = 1,
                             Model = "E-tron"
                         },
                         new
@@ -115,7 +109,6 @@ namespace Infrastructure.RL.Migrations
                             Available = true,
                             Brand = "Audi",
                             Image = "https://ev-database.org/img/auto/Audi_e-tron/Audi_e-tron-01@2x.jpg",
-                            LocationId = 1,
                             Model = "E-tron"
                         },
                         new
@@ -124,7 +117,6 @@ namespace Infrastructure.RL.Migrations
                             Available = true,
                             Brand = "Audi",
                             Image = "https://ev-database.org/img/auto/Audi_e-tron/Audi_e-tron-01@2x.jpg",
-                            LocationId = 2,
                             Model = "E-tron"
                         });
                 });
@@ -197,18 +189,12 @@ namespace Infrastructure.RL.Migrations
                     b.Property<int>("TripId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserEmail")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("TripId");
-
-                    b.HasIndex("UserEmail");
 
                     b.ToTable("Reservations");
                 });
@@ -230,8 +216,8 @@ namespace Infrastructure.RL.Migrations
                     b.Property<int?>("DestinationId")
                         .HasColumnType("int");
 
-                    b.Property<string>("DriverEmail")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("DriverId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
@@ -247,7 +233,7 @@ namespace Infrastructure.RL.Migrations
 
                     b.HasIndex("DestinationId");
 
-                    b.HasIndex("DriverEmail");
+                    b.HasIndex("DriverId");
 
                     b.ToTable("Trips");
 
@@ -292,14 +278,17 @@ namespace Infrastructure.RL.Migrations
 
             modelBuilder.Entity("Core.Domain.User", b =>
                 {
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MobileNr")
                         .HasColumnType("nvarchar(max)");
@@ -310,34 +299,42 @@ namespace Infrastructure.RL.Migrations
                     b.Property<int>("UserRole")
                         .HasColumnType("int");
 
-                    b.HasKey("Email");
+                    b.HasKey("Id");
 
                     b.ToTable("Users");
 
                     b.HasData(
                         new
                         {
-                            Email = "admin@mail.com",
-                            BirthDate = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Id = 1,
+                            BirthDate = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "admin@mail.com",
                             Name = "Admin",
                             UserRole = 0
                         },
                         new
                         {
-                            Email = "hg@mail.com",
-                            BirthDate = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Id = 2,
+                            BirthDate = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "hg@mail.com",
                             Name = "Hans Gerard",
-                            UserRole = 0
+                            UserRole = 1
                         },
                         new
                         {
-                            Email = "sten@mail.com",
-                            BirthDate = new DateTime(2000, 10, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Id = 3,
+                            BirthDate = new DateTime(2000, 10, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "sten@mail.com",
                             Name = "Sten",
                             UserRole = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            BirthDate = new DateTime(2001, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "kalle@mail.com",
+                            Name = "Kalle",
+                            UserRole = 0
                         });
                 });
 
@@ -345,9 +342,7 @@ namespace Infrastructure.RL.Migrations
                 {
                     b.HasOne("Core.Domain.Location", "Location")
                         .WithMany("Cars")
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("LocationId");
 
                     b.Navigation("Location");
                 });
@@ -357,12 +352,6 @@ namespace Infrastructure.RL.Migrations
                     b.HasOne("Core.Domain.Trip", null)
                         .WithMany("Reservations")
                         .HasForeignKey("TripId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Core.Domain.User", null)
-                        .WithMany("Reservations")
-                        .HasForeignKey("UserEmail")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -383,7 +372,7 @@ namespace Infrastructure.RL.Migrations
 
                     b.HasOne("Core.Domain.User", "Driver")
                         .WithMany("TripsAsDriver")
-                        .HasForeignKey("DriverEmail");
+                        .HasForeignKey("DriverId");
 
                     b.Navigation("Car");
 
@@ -411,8 +400,6 @@ namespace Infrastructure.RL.Migrations
 
             modelBuilder.Entity("Core.Domain.User", b =>
                 {
-                    b.Navigation("Reservations");
-
                     b.Navigation("TripsAsDriver");
                 });
 #pragma warning restore 612, 618

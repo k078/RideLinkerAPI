@@ -12,17 +12,14 @@ namespace Core.Domain
 {
     public class User
     {
+        [Key]
         public int Id { get; set; }
         public string? Name { get; set; }
         public DateTime BirthDate { get; set; }
-
-        [Key]
         public string? Email { get; set; }
         public string? MobileNr { get; set; }
         public Role UserRole { get; set; }
         [JsonIgnore]
         public ICollection<Trip> TripsAsDriver { get; set; } = new List<Trip>();
-        public ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
-
     }
 }
