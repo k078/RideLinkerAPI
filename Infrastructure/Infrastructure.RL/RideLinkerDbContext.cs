@@ -38,17 +38,18 @@ namespace Infrastructure.RL
 
             modelBuilder.Entity<User>().HasData(
                 new User { Id = 1, Name = "Admin", Email = "admin@mail.com", BirthDate = new DateTime(2000, 01, 01, 0, 0, 0), UserRole = Role.ADMIN },
-                new User { Id = 2, Name = "Hans Gerard", Email = "hg@mail.com", BirthDate = new DateTime(2000, 01, 01, 0, 0, 0), UserRole = Role.ADMIN },
-                new User { Id = 3, Name = "Sten", Email = "sten@mail.com", BirthDate = new DateTime(2000, 10, 28, 0, 0, 0), UserRole = Role.EMPLOYEE }
+                new User { Id = 2, Name = "Hans Gerard", Email = "hg@mail.com", BirthDate = new DateTime(2000, 01, 01, 0, 0, 0), UserRole = Role.EMPLOYEE },
+                new User { Id = 3, Name = "Sten", Email = "sten@mail.com", BirthDate = new DateTime(2000, 10, 28, 0, 0, 0), UserRole = Role.EMPLOYEE },
+                new User { Id = 3, Name = "Kalle", Email = "kalle@mail.com", BirthDate = new DateTime(2001, 02, 01, 0, 0, 0), UserRole = Role.ADMIN }
             );
 
             modelBuilder.Entity<Trip>().HasData(
-                new Trip { Id = 1, StartTime = new DateTime(2023, 12, 22, 12, 0, 0), EndTime = new DateTime(2023, 12, 22, 14, 0, 0), DriverId = 1, CarId = 1, DriverEmail = "admin@mail.com", },
-                new Trip { Id = 2, StartTime = new DateTime(2023, 12, 23, 12, 0, 0), EndTime = new DateTime(2023, 12, 23, 13, 0, 0), DriverId = 2, CarId = 3, DriverEmail = "hg@mail.com" },
-                new Trip { Id = 3, StartTime = new DateTime(2023, 12, 23, 15, 0, 0), EndTime = new DateTime(2023, 12, 23, 16, 0, 0), DriverId = 2, CarId = 3, DriverEmail = "hg@mail.com" },
-                new Trip { Id = 4, StartTime = new DateTime(2023, 12, 27, 12, 0, 0), EndTime = new DateTime(2023, 12, 27, 14, 0, 0), DriverId = 2, CarId = 6, DriverEmail = "hg@mail.com" },
-                new Trip { Id = 5, StartTime = new DateTime(2023, 12, 27, 12, 0, 0), EndTime = new DateTime(2023, 12, 27, 14, 0, 0), DriverId = 3, CarId = 5, DriverEmail = "sten@mail.com" },
-                new Trip { Id = 6, StartTime = new DateTime(2023, 12, 27, 17, 0, 0), EndTime = new DateTime(2023, 12, 27, 19, 0, 0), DriverId = 3, CarId = 5, DriverEmail = "sten@mail.com" }
+                new Trip { Id = 1, StartTime = new DateTime(2023, 12, 22, 12, 0, 0), EndTime = new DateTime(2023, 12, 22, 14, 0, 0) },
+                new Trip { Id = 2, StartTime = new DateTime(2023, 12, 23, 12, 0, 0), EndTime = new DateTime(2023, 12, 23, 13, 0, 0) },
+                new Trip { Id = 3, StartTime = new DateTime(2023, 12, 23, 15, 0, 0), EndTime = new DateTime(2023, 12, 23, 16, 0, 0) },
+                new Trip { Id = 4, StartTime = new DateTime(2023, 12, 27, 12, 0, 0), EndTime = new DateTime(2023, 12, 27, 14, 0, 0) },
+                new Trip { Id = 5, StartTime = new DateTime(2023, 12, 27, 12, 0, 0), EndTime = new DateTime(2023, 12, 27, 14, 0, 0) },
+                new Trip { Id = 6, StartTime = new DateTime(2023, 12, 27, 17, 0, 0), EndTime = new DateTime(2023, 12, 27, 19, 0, 0) }
             );
 
 

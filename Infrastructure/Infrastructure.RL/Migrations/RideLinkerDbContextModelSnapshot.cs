@@ -218,7 +218,7 @@ namespace Infrastructure.RL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CarId")
+                    b.Property<int?>("CarId")
                         .HasColumnType("int");
 
                     b.Property<int?>("DepartureId")
@@ -228,11 +228,7 @@ namespace Infrastructure.RL.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("DriverEmail")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("DriverId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
@@ -256,54 +252,36 @@ namespace Infrastructure.RL.Migrations
                         new
                         {
                             Id = 1,
-                            CarId = 1,
-                            DriverEmail = "admin@mail.com",
-                            DriverId = 1,
                             EndTime = new DateTime(2023, 12, 22, 14, 0, 0, 0, DateTimeKind.Unspecified),
                             StartTime = new DateTime(2023, 12, 22, 12, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 2,
-                            CarId = 3,
-                            DriverEmail = "hg@mail.com",
-                            DriverId = 2,
                             EndTime = new DateTime(2023, 12, 23, 13, 0, 0, 0, DateTimeKind.Unspecified),
                             StartTime = new DateTime(2023, 12, 23, 12, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 3,
-                            CarId = 3,
-                            DriverEmail = "hg@mail.com",
-                            DriverId = 2,
                             EndTime = new DateTime(2023, 12, 23, 16, 0, 0, 0, DateTimeKind.Unspecified),
                             StartTime = new DateTime(2023, 12, 23, 15, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 4,
-                            CarId = 6,
-                            DriverEmail = "hg@mail.com",
-                            DriverId = 2,
                             EndTime = new DateTime(2023, 12, 27, 14, 0, 0, 0, DateTimeKind.Unspecified),
                             StartTime = new DateTime(2023, 12, 27, 12, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 5,
-                            CarId = 5,
-                            DriverEmail = "sten@mail.com",
-                            DriverId = 3,
                             EndTime = new DateTime(2023, 12, 27, 14, 0, 0, 0, DateTimeKind.Unspecified),
                             StartTime = new DateTime(2023, 12, 27, 12, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 6,
-                            CarId = 5,
-                            DriverEmail = "sten@mail.com",
-                            DriverId = 3,
                             EndTime = new DateTime(2023, 12, 27, 19, 0, 0, 0, DateTimeKind.Unspecified),
                             StartTime = new DateTime(2023, 12, 27, 17, 0, 0, 0, DateTimeKind.Unspecified)
                         });
@@ -390,9 +368,7 @@ namespace Infrastructure.RL.Migrations
                 {
                     b.HasOne("Core.Domain.Car", "Car")
                         .WithMany("Trips")
-                        .HasForeignKey("CarId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CarId");
 
                     b.HasOne("Core.Domain.Location", "Departure")
                         .WithMany()
@@ -404,9 +380,7 @@ namespace Infrastructure.RL.Migrations
 
                     b.HasOne("Core.Domain.User", "Driver")
                         .WithMany("TripsAsDriver")
-                        .HasForeignKey("DriverEmail")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DriverEmail");
 
                     b.Navigation("Car");
 

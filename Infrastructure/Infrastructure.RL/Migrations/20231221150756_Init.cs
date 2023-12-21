@@ -76,9 +76,8 @@ namespace Infrastructure.RL.Migrations
                     DestinationId = table.Column<int>(type: "int", nullable: true),
                     StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DriverId = table.Column<int>(type: "int", nullable: false),
-                    DriverEmail = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CarId = table.Column<int>(type: "int", nullable: false)
+                    CarId = table.Column<int>(type: "int", nullable: true),
+                    DriverEmail = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -87,8 +86,7 @@ namespace Infrastructure.RL.Migrations
                         name: "FK_Trips_Cars_CarId",
                         column: x => x.CarId,
                         principalTable: "Cars",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Trips_Locations_DepartureId",
                         column: x => x.DepartureId,
@@ -103,8 +101,7 @@ namespace Infrastructure.RL.Migrations
                         name: "FK_Trips_Users_DriverEmail",
                         column: x => x.DriverEmail,
                         principalTable: "Users",
-                        principalColumn: "Email",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Email");
                 });
 
             migrationBuilder.CreateTable(
@@ -125,15 +122,13 @@ namespace Infrastructure.RL.Migrations
                         column: x => x.TripId,
                         principalTable: "Trips",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction,
-                        onUpdate: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Reservations_Users_UserEmail",
                         column: x => x.UserEmail,
                         principalTable: "Users",
                         principalColumn: "Email",
-                        onDelete: ReferentialAction.NoAction,
-                        onUpdate: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
@@ -147,6 +142,19 @@ namespace Infrastructure.RL.Migrations
                     { 4, "Velperweg 27", "Arnhem" },
                     { 5, "Brouwerijstraat 1", "Enschede" },
                     { 6, "Vrijthof 23", "Maastricht" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Trips",
+                columns: new[] { "Id", "CarId", "DepartureId", "DestinationId", "DriverEmail", "EndTime", "StartTime" },
+                values: new object[,]
+                {
+                    { 1, null, null, null, null, new DateTime(2023, 12, 22, 14, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 12, 22, 12, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 2, null, null, null, null, new DateTime(2023, 12, 23, 13, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 12, 23, 12, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 3, null, null, null, null, new DateTime(2023, 12, 23, 16, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 12, 23, 15, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 4, null, null, null, null, new DateTime(2023, 12, 27, 14, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 12, 27, 12, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 5, null, null, null, null, new DateTime(2023, 12, 27, 14, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 12, 27, 12, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 6, null, null, null, null, new DateTime(2023, 12, 27, 19, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 12, 27, 17, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
             migrationBuilder.InsertData(
@@ -172,19 +180,6 @@ namespace Infrastructure.RL.Migrations
                     { 6, true, "Audi", "https://ev-database.org/img/auto/Audi_e-tron/Audi_e-tron-01@2x.jpg", 1, "E-tron" },
                     { 7, true, "Audi", "https://ev-database.org/img/auto/Audi_e-tron/Audi_e-tron-01@2x.jpg", 1, "E-tron" },
                     { 8, true, "Audi", "https://ev-database.org/img/auto/Audi_e-tron/Audi_e-tron-01@2x.jpg", 2, "E-tron" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Trips",
-                columns: new[] { "Id", "CarId", "DepartureId", "DestinationId", "DriverEmail", "DriverId", "EndTime", "StartTime" },
-                values: new object[,]
-                {
-                    { 1, 1, null, null, "admin@mail.com", 1, new DateTime(2023, 12, 22, 14, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 12, 22, 12, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 2, 3, null, null, "hg@mail.com", 2, new DateTime(2023, 12, 23, 13, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 12, 23, 12, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 3, 3, null, null, "hg@mail.com", 2, new DateTime(2023, 12, 23, 16, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 12, 23, 15, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 4, 6, null, null, "hg@mail.com", 2, new DateTime(2023, 12, 27, 14, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 12, 27, 12, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 5, 5, null, null, "sten@mail.com", 3, new DateTime(2023, 12, 27, 14, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 12, 27, 12, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 6, 5, null, null, "sten@mail.com", 3, new DateTime(2023, 12, 27, 19, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 12, 27, 17, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
             migrationBuilder.CreateIndex(
