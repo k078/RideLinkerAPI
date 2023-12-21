@@ -35,7 +35,6 @@ namespace Infrastructure.RL
         {
             return await _context.Trips
                 .Include(t => t.Car)
-                .ThenInclude(c => c.Location)
                 .Include(t => t.Driver)
                 .Include(t => t.Departure)
                 .Include(t => t.Destination)

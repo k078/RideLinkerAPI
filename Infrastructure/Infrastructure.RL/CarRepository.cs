@@ -25,10 +25,10 @@ namespace Infrastructure.RL
         {
             return await _context.Cars
                 .Include(c => c.Location)
-                .Include(c => c.Trips)
-                .ThenInclude(t => t.Departure)
-                .Include(c => c.Trips)
-                .ThenInclude(t => t.Destination)
+                //.Include(c => c.Trips)
+                //.ThenInclude(t => t.Departure)
+                //.Include(c => c.Trips)
+                //.ThenInclude(t => t.Destination)
                 .FirstAsync(c => c.Id == carId);
         }
 
