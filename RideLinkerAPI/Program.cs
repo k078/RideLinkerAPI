@@ -1,14 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Infrastructure.RL;
-using Core.DomainService;
-using Core.Domain;
 using Core.DomainService.Interfaces;
 using Core.DomainService.Services;
-using RideLinkerAPI.Controllers;
 using Microsoft.AspNetCore.Identity;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text.Json.Serialization;
 
@@ -26,7 +22,8 @@ builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
-    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
 });
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -45,7 +42,6 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<AppIdentityDbContext>()
     .AddDefaultTokenProviders();
-
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var key = Encoding.ASCII.GetBytes(jwtSettings["Secret"]);
