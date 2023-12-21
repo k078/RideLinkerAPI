@@ -23,12 +23,24 @@ namespace Infrastructure.RL
 
         public async Task<Trip> GetByIdAsync(int id)
         {
-            return await _context.Trips.FindAsync(id);
+            return await _context.Trips
+                .Include(t => t.Car)
+                .ThenInclude(c => c.Location)
+                .Include(t => t.Driver)
+                .Include(t => t.Departure)
+                .Include(t => t.Destination)
+                .FirstAsync(t => t.Id == id);
         }
 
         public async Task<IEnumerable<Trip>> GetAllAsync()
         {
-            return await _context.Trips.ToListAsync();
+            return await _context.Trips
+                .Include(t => t.Car)
+                .ThenInclude(c => c.Location)
+                .Include(t => t.Driver)
+                .Include(t => t.Departure)
+                .Include(t => t.Destination)
+                .ToListAsync();
         }
 
         public async Task AddAsync(Trip trip)

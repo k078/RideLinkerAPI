@@ -21,14 +21,26 @@ namespace Infrastructure.RL
             _logger = logger;
         }
 
-        public async Task<Car> GetByIdAsync(int id)
+        public async Task<Car> GetByIdAsync(int carId)
         {
-            return await _context.Cars.FindAsync(id);
+            return await _context.Cars
+                .Include(c => c.Location)
+                .Include(c => c.Trips)
+                .ThenInclude(t => t.Departure)
+                .Include(c => c.Trips)
+                .ThenInclude(t => t.Destination)
+                .FirstAsync(c => c.Id == carId);
         }
 
         public async Task<IEnumerable<Car>> GetAllAsync()
         {
-            return await _context.Cars.ToListAsync();
+            return await _context.Cars
+                .Include(c => c.Location)
+                .Include(c => c.Trips)  
+                .ThenInclude(t => t.Departure)  
+                .Include(c => c.Trips)
+                .ThenInclude(t => t.Destination)  
+                .ToListAsync();
         }
 
         public async Task AddAsync(Car car)

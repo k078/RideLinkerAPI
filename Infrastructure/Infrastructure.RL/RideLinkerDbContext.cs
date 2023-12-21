@@ -5,13 +5,14 @@ namespace Infrastructure.RL
 {
     public class RideLinkerDbContext : DbContext
     {
-        public RideLinkerDbContext(DbContextOptions<RideLinkerDbContext> options) : base(options) { }
 
         public DbSet<Car> Cars { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<Trip> Trips { get; set; }
         public DbSet<User> Users { get; set; }
+
+        public RideLinkerDbContext(DbContextOptions<RideLinkerDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -36,9 +37,9 @@ namespace Infrastructure.RL
             );
 
             modelBuilder.Entity<User>().HasData(
-                new User { Id = 1, Name = "Admin", Email = "admin@mail.com", Password = "Admin1!", BirthDate = new DateTime(2000, 01, 01, 0, 0, 0), UserRole = Role.ADMIN },
-                new User { Id = 2, Name = "Hans Gerard", Email = "hg@mail.com", Password = "Password1!", BirthDate = new DateTime(2000, 01, 01, 0, 0, 0), UserRole = Role.ADMIN },
-                new User { Id = 3, Name = "Sten", Email = "sten@mail.com", Password = "Password1!", BirthDate = new DateTime(2000, 10, 28, 0, 0, 0), UserRole = Role.EMPLOYEE }
+                new User { Id = 1, Name = "Admin", Email = "admin@mail.com", BirthDate = new DateTime(2000, 01, 01, 0, 0, 0), UserRole = Role.ADMIN },
+                new User { Id = 2, Name = "Hans Gerard", Email = "hg@mail.com", BirthDate = new DateTime(2000, 01, 01, 0, 0, 0), UserRole = Role.ADMIN },
+                new User { Id = 3, Name = "Sten", Email = "sten@mail.com", BirthDate = new DateTime(2000, 10, 28, 0, 0, 0), UserRole = Role.EMPLOYEE }
             );
 
             modelBuilder.Entity<Trip>().HasData(
@@ -54,5 +55,4 @@ namespace Infrastructure.RL
             base.OnModelCreating(modelBuilder);
         }
     }
-
 }
