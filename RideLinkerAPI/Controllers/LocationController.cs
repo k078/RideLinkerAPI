@@ -9,10 +9,10 @@ namespace RideLinkerAPI.Controllers
     [Route("api/[controller]")]
     public class LocationController : ControllerBase
     {
-        private readonly ILogger<CarController> _logger;
+        private readonly ILogger<LocationController> _logger;
         private readonly ILocationService _locationService;
 
-        public LocationController(ILogger<CarController> logger, ILocationService locationService)
+        public LocationController(ILogger<LocationController> logger, ILocationService locationService)
         {
             _logger = logger;
             _locationService = locationService;

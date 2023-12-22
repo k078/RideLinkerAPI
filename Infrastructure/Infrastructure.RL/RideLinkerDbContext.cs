@@ -16,6 +16,11 @@ namespace Infrastructure.RL
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            modelBuilder.Entity<Reservation>()
+                .HasIndex(r => new { r.UserId, r.TripId })
+                .IsUnique();
+
             modelBuilder.Entity<Location>().HasData(
                 new Location { Id = 1, Name = "Breda", Address = "Konijnenberg 24" },
                 new Location { Id = 2, Name = "Amsterdam", Address = "Nachtwachtlaan 20" },
@@ -36,6 +41,10 @@ namespace Infrastructure.RL
                 new Car { Id = 8, Brand = "Audi", Model = "E-tron", Image = "https://ev-database.org/img/auto/Audi_e-tron/Audi_e-tron-01@2x.jpg", Available = true }
             );
 
+            modelBuilder.Entity<User>()
+               .HasIndex(u => u.Email)
+               .IsUnique();
+
             modelBuilder.Entity<User>().HasData(
                 new User { Id = 1, Name = "Admin", Email = "admin@mail.com", BirthDate = new DateTime(2000, 01, 01, 0, 0, 0), UserRole = Role.ADMIN },
                 new User { Id = 2, Name = "Hans Gerard", Email = "hg@mail.com", BirthDate = new DateTime(2000, 01, 01, 0, 0, 0), UserRole = Role.EMPLOYEE },
@@ -50,6 +59,15 @@ namespace Infrastructure.RL
                 new Trip { Id = 4, StartTime = new DateTime(2023, 12, 27, 12, 0, 0), EndTime = new DateTime(2023, 12, 27, 14, 0, 0) },
                 new Trip { Id = 5, StartTime = new DateTime(2023, 12, 27, 12, 0, 0), EndTime = new DateTime(2023, 12, 27, 14, 0, 0) },
                 new Trip { Id = 6, StartTime = new DateTime(2023, 12, 27, 17, 0, 0), EndTime = new DateTime(2023, 12, 27, 19, 0, 0) }
+            );
+
+            modelBuilder.Entity<Reservation>().HasData(
+                new Reservation { Id = 1, UserId = 1, TripId = 1 },
+                new Reservation { Id = 2, UserId = 2, TripId = 2 },
+                new Reservation { Id = 3, UserId = 2, TripId = 3 },
+                new Reservation { Id = 4, UserId = 2, TripId = 4 },
+                new Reservation { Id = 5, UserId = 3, TripId = 5 },
+                new Reservation { Id = 6, UserId = 3, TripId = 6 }
             );
 
 

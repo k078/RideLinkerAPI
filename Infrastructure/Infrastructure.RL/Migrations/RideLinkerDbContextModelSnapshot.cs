@@ -39,7 +39,7 @@ namespace Infrastructure.RL.Migrations
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("LocationId")
+                    b.Property<int>("LocationId")
                         .HasColumnType("int");
 
                     b.Property<string>("Model")
@@ -58,6 +58,7 @@ namespace Infrastructure.RL.Migrations
                             Available = true,
                             Brand = "Volkswagen",
                             Image = "https://dam.broekhuis.online/online/broekhuis/modelpaginas/volkswagen/image-thumb__29831__original/hero-vw-id3-mob.webp",
+                            LocationId = 1,
                             Model = "ID.3"
                         },
                         new
@@ -66,6 +67,7 @@ namespace Infrastructure.RL.Migrations
                             Available = true,
                             Brand = "Volkswagen",
                             Image = "https://dam.broekhuis.online/online/broekhuis/modelpaginas/volkswagen/image-thumb__29831__original/hero-vw-id3-mob.webp",
+                            LocationId = 1,
                             Model = "ID.3"
                         },
                         new
@@ -74,6 +76,7 @@ namespace Infrastructure.RL.Migrations
                             Available = true,
                             Brand = "Volkswagen",
                             Image = "https://dam.broekhuis.online/online/broekhuis/modelpaginas/volkswagen/image-thumb__29831__original/hero-vw-id3-mob.webp",
+                            LocationId = 1,
                             Model = "ID.3"
                         },
                         new
@@ -82,6 +85,7 @@ namespace Infrastructure.RL.Migrations
                             Available = true,
                             Brand = "Volkswagen",
                             Image = "https://dam.broekhuis.online/online/broekhuis/modelpaginas/volkswagen/image-thumb__29831__original/hero-vw-id3-mob.webp",
+                            LocationId = 1,
                             Model = "ID.3"
                         },
                         new
@@ -90,6 +94,7 @@ namespace Infrastructure.RL.Migrations
                             Available = true,
                             Brand = "Audi",
                             Image = "https://ev-database.org/img/auto/Audi_e-tron/Audi_e-tron-01@2x.jpg",
+                            LocationId = 1,
                             Model = "E-tron"
                         },
                         new
@@ -98,6 +103,7 @@ namespace Infrastructure.RL.Migrations
                             Available = true,
                             Brand = "Audi",
                             Image = "https://ev-database.org/img/auto/Audi_e-tron/Audi_e-tron-01@2x.jpg",
+                            LocationId = 1,
                             Model = "E-tron"
                         },
                         new
@@ -106,6 +112,7 @@ namespace Infrastructure.RL.Migrations
                             Available = true,
                             Brand = "Audi",
                             Image = "https://ev-database.org/img/auto/Audi_e-tron/Audi_e-tron-01@2x.jpg",
+                            LocationId = 1,
                             Model = "E-tron"
                         },
                         new
@@ -114,6 +121,7 @@ namespace Infrastructure.RL.Migrations
                             Available = true,
                             Brand = "Audi",
                             Image = "https://ev-database.org/img/auto/Audi_e-tron/Audi_e-tron-01@2x.jpg",
+                            LocationId = 2,
                             Model = "E-tron"
                         });
                 });
@@ -193,7 +201,48 @@ namespace Infrastructure.RL.Migrations
 
                     b.HasIndex("TripId");
 
+                    b.HasIndex("UserId", "TripId")
+                        .IsUnique();
+
                     b.ToTable("Reservations");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            TripId = 1,
+                            UserId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            TripId = 2,
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            TripId = 3,
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 4,
+                            TripId = 4,
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 5,
+                            TripId = 5,
+                            UserId = 3
+                        },
+                        new
+                        {
+                            Id = 6,
+                            TripId = 6,
+                            UserId = 3
+                        });
                 });
 
             modelBuilder.Entity("Core.Domain.Trip", b =>
@@ -204,7 +253,7 @@ namespace Infrastructure.RL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CarId")
+                    b.Property<int>("CarId")
                         .HasColumnType("int");
 
                     b.Property<int?>("DepartureId")
@@ -213,7 +262,10 @@ namespace Infrastructure.RL.Migrations
                     b.Property<int?>("DestinationId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("DriverId")
+                    b.Property<string>("DriverEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("DriverId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("EndTime")
@@ -238,36 +290,54 @@ namespace Infrastructure.RL.Migrations
                         new
                         {
                             Id = 1,
+                            CarId = 1,
+                            DriverEmail = "admin@mail.com",
+                            DriverId = 1,
                             EndTime = new DateTime(2023, 12, 22, 14, 0, 0, 0, DateTimeKind.Unspecified),
                             StartTime = new DateTime(2023, 12, 22, 12, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 2,
+                            CarId = 3,
+                            DriverEmail = "hg@mail.com",
+                            DriverId = 2,
                             EndTime = new DateTime(2023, 12, 23, 13, 0, 0, 0, DateTimeKind.Unspecified),
                             StartTime = new DateTime(2023, 12, 23, 12, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 3,
+                            CarId = 3,
+                            DriverEmail = "hg@mail.com",
+                            DriverId = 2,
                             EndTime = new DateTime(2023, 12, 23, 16, 0, 0, 0, DateTimeKind.Unspecified),
                             StartTime = new DateTime(2023, 12, 23, 15, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 4,
+                            CarId = 6,
+                            DriverEmail = "hg@mail.com",
+                            DriverId = 2,
                             EndTime = new DateTime(2023, 12, 27, 14, 0, 0, 0, DateTimeKind.Unspecified),
                             StartTime = new DateTime(2023, 12, 27, 12, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 5,
+                            CarId = 5,
+                            DriverEmail = "sten@mail.com",
+                            DriverId = 3,
                             EndTime = new DateTime(2023, 12, 27, 14, 0, 0, 0, DateTimeKind.Unspecified),
                             StartTime = new DateTime(2023, 12, 27, 12, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 6,
+                            CarId = 5,
+                            DriverEmail = "sten@mail.com",
+                            DriverId = 3,
                             EndTime = new DateTime(2023, 12, 27, 19, 0, 0, 0, DateTimeKind.Unspecified),
                             StartTime = new DateTime(2023, 12, 27, 17, 0, 0, 0, DateTimeKind.Unspecified)
                         });
@@ -285,7 +355,8 @@ namespace Infrastructure.RL.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("MobileNr")
                         .HasColumnType("nvarchar(max)");
@@ -297,6 +368,9 @@ namespace Infrastructure.RL.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.ToTable("Users");
 
@@ -315,7 +389,7 @@ namespace Infrastructure.RL.Migrations
                             BirthDate = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "hg@mail.com",
                             Name = "Hans Gerard",
-                            UserRole = 1
+                            UserRole = 0
                         },
                         new
                         {
@@ -324,14 +398,6 @@ namespace Infrastructure.RL.Migrations
                             Email = "sten@mail.com",
                             Name = "Sten",
                             UserRole = 1
-                        },
-                        new
-                        {
-                            Id = 4,
-                            BirthDate = new DateTime(2001, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "kalle@mail.com",
-                            Name = "Kalle",
-                            UserRole = 0
                         });
                 });
 
@@ -339,25 +405,39 @@ namespace Infrastructure.RL.Migrations
                 {
                     b.HasOne("Core.Domain.Location", "Location")
                         .WithMany("Cars")
-                        .HasForeignKey("LocationId");
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Location");
                 });
 
             modelBuilder.Entity("Core.Domain.Reservation", b =>
                 {
-                    b.HasOne("Core.Domain.Trip", null)
+                    b.HasOne("Core.Domain.Trip", "Trip")
                         .WithMany("Reservations")
                         .HasForeignKey("TripId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Core.Domain.User", "User")
+                        .WithMany("Reservations")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Trip");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Core.Domain.Trip", b =>
                 {
                     b.HasOne("Core.Domain.Car", "Car")
                         .WithMany("Trips")
-                        .HasForeignKey("CarId");
+                        .HasForeignKey("CarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Core.Domain.Location", "Departure")
                         .WithMany()
@@ -369,7 +449,9 @@ namespace Infrastructure.RL.Migrations
 
                     b.HasOne("Core.Domain.User", "Driver")
                         .WithMany("TripsAsDriver")
-                        .HasForeignKey("DriverId");
+                        .HasForeignKey("DriverId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Car");
 
@@ -397,6 +479,8 @@ namespace Infrastructure.RL.Migrations
 
             modelBuilder.Entity("Core.Domain.User", b =>
                 {
+                    b.Navigation("Reservations");
+
                     b.Navigation("TripsAsDriver");
                 });
 #pragma warning restore 612, 618

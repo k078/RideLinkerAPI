@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -9,6 +10,7 @@ namespace Core.Domain
 {
     public class Trip
     {
+        [Key]
         public int Id { get; set; }
         public Location? Departure { get; set; }
         public Location? Destination { get; set; }
