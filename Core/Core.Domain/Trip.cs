@@ -16,11 +16,6 @@ namespace Core.Domain
         public Location? Destination { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
-        public int DriverId { get; set; }
-        public string? DriverEmail { get; set; }
-        public int CarId { get; set; }
-
-        [JsonIgnore]
         public Car? Car { get; set; }
         public User? Driver { get; set; }
         public ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
