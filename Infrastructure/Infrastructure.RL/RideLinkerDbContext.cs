@@ -73,5 +73,6 @@ namespace Infrastructure.RL
 
             base.OnModelCreating(modelBuilder);
         }
+
     }
 }
