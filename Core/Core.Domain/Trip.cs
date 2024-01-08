@@ -19,6 +19,9 @@ namespace Core.Domain
         public Car? Car { get; set; }
         public User? Driver { get; set; }
         public ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
-
+        public int DepartureId { get; set; }
+        public int DestinationId { get; set; }  
+        public int CarId { get; set; }
+        public int DriverId { get; set; }
     }
 }

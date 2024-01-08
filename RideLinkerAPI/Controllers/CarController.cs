@@ -12,11 +12,13 @@ namespace RideLinkerAPI.Controllers
     {
         private readonly ILogger<CarController> _logger;
         private readonly ICarService _carService;
+        private readonly ILocationService _locationService;
 
-        public CarController(ILogger<CarController> logger, ICarService carService)
+        public CarController(ILogger<CarController> logger, ICarService carService, ILocationService locationService)
         {
             _logger = logger;
             _carService = carService;
+            _locationService = locationService;
         }
 
         [HttpGet]
@@ -55,9 +57,19 @@ namespace RideLinkerAPI.Controllers
         public async Task<IActionResult> AddCar([FromBody] Car inCar)
         {
             _logger.LogInformation("AddCar() aangeroepen");
+            _logger.LogInformation($"Car: {inCar.Image}");
+            _logger.LogInformation($"LocationId van Car: {inCar.LocationId}");
 
             try
             {
+                Location location = await _locationService.GetByIdAsync(inCar.LocationId);
+                _logger.LogInformation($"Location: {location.Name}");
+
+                if (location == null)
+                {
+                       return BadRequest("Locatie bestaat niet");
+                }
+                inCar.Location = location;
                 await _carService.AddAsync(inCar);
                 return Ok(inCar);
             }

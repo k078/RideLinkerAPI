@@ -17,6 +17,7 @@ namespace Core.Domain
         public string? Image { get; set; }
         public bool Available { get; set; }
         public Location? Location { get; set; }
+        public int LocationId { get; set; }
         [JsonIgnore]
         public ICollection<Trip> Trips { get; set; } = new List<Trip>();
 
