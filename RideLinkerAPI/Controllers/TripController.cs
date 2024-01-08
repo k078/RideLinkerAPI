@@ -54,6 +54,8 @@ namespace RideLinkerAPI.Controllers
         public async Task<IActionResult> AddTrip([FromBody] Trip inTrip)
         {
             _logger.LogInformation("AddTrip() aangeroepen");
+            _logger.LogInformation($"Trip: {inTrip.Departure}");
+            _logger.LogInformation($"Trip: {inTrip.Destination}");
 
             try
             {
