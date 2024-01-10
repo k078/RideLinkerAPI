@@ -1,6 +1,7 @@
 ﻿using Core.Domain;
 using Core.DomainService.Interfaces;
 using Core.DomainService.Services;
+using Infrastructure.RL.Migrations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -98,5 +99,82 @@ namespace Tests
             Assert.Equal("Breda", addedLocation.Name);
         }
 
+        [Fact]
+        public async Task AddLocation_InvalidInput_ReturnsBadRequestResult()
+        {
+            // Arrange
+            Location invalidLocation = null;
+
+            // Act
+            var result = await _locationController.AddLocation(invalidLocation);
+
+            // Assert
+            var badResult = Assert.IsType<BadRequestObjectResult>(result);
+            Assert.Equal("Location data is null", badResult.Value);
+        }
+
+        [Fact]
+        public async Task UpdateLocation_ValidInput_ReturnsOkResult()
+        {
+            // Arrange
+            var locaId = 1;
+            var updateLocation = new Location { Id = locaId, Name = "UpdatedBreda" };
+
+            // Act
+            var result = await _locationController.UpdateLocation(locaId, updateLocation);
+
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            var model = Assert.IsType<Location>(okResult.Value);
+            Assert.Equal(locaId, model.Id);
+            Assert.Equal("UpdatedBreda", model.Name);
+        }
+
+        [Fact]
+        public async Task UpdateLocation_InvalidInput_ReturnsBadRequestResult()
+        {
+            // Arrange
+            var locaId = 1;
+            Location updatedLocation = null;
+
+            // Act
+            var result = await _locationController.UpdateLocation(locaId, updatedLocation);
+
+            // Assert
+            var badRequest = Assert.IsType<BadRequestObjectResult>(result);
+            Assert.Equal("Location data is invalid", badRequest.Value);
+        }
+
+        [Fact]
+        public async Task DeleteLocation_ExistingId_ReturnsOkResult()
+        {
+            //Arrange
+            var locaId = 1;
+            var locations = new List<Location> { new Location{ Id=1, Name="Breda"}, new Location { Id=2, Name="Amsterdam"} };
+            _locationServiceMock.Setup(service => service.GetByIdAsync(locaId)).ReturnsAsync(locations.FirstOrDefault(c => c.Id == locaId));
+            _locationServiceMock.Setup(service => service.DeleteAsync(locaId)).Returns(Task.CompletedTask);
+
+            // Act
+            var result = await _locationController.DeleteLocation(locaId);
+
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            Assert.Equal($"Location ID gedelete: {locaId}", okResult.Value);
+        }
+
+        [Fact]
+        public async Task DeleteLocation_NonExistingId_ReturnsNotFoundResult()
+        {
+            // Arrange
+            var locaId = 0;
+            _locationServiceMock.Setup(service => service.DeleteAsync(locaId)).Throws(new Exception("Error deleting car"));
+
+            // Act
+            var result = await _locationController.DeleteLocation(locaId);
+
+            // Assert
+            Assert.IsType<NotFoundResult>(result);
+            Assert.Equal(404, ((NotFoundResult)result).StatusCode);
+        }
     }
 }

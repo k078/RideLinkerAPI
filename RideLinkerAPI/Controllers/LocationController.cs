@@ -1,5 +1,6 @@
 ﻿using Core.Domain;
 using Core.DomainService.Interfaces;
+using Infrastructure.RL.Migrations;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -96,7 +97,7 @@ namespace RideLinkerAPI.Controllers
                 }
                 location.Id = id;
                 await _locationService.UpdateAsync(location);
-                return Ok(new { message = "Location updated successfully", location });
+                return Ok(location);
             }
             catch (Exception ex)
             {
@@ -118,7 +119,7 @@ namespace RideLinkerAPI.Controllers
                 }
 
                 await _locationService.DeleteAsync(id);
-                return Ok(new { message = "Location deleted successfully" });
+                return Ok($"Location ID gedelete: {location.Id}");
             }
             catch (Exception ex)
             {
