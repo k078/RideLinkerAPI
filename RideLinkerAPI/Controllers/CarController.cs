@@ -117,6 +117,13 @@ namespace RideLinkerAPI.Controllers
 
             try
             {
+                var car = await _carService.GetByIdAsync(id);
+                if (car == null)
+                {
+                    _logger.LogWarning($"Auto met id {id} niet gevonden");
+                    return NotFound("Auto met dit Id is niet gevonden."); 
+                }
+
                 await _carService.DeleteAsync(id);
                 return Ok("Auto ID gedelete: " + id);
             }
