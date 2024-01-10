@@ -25,8 +25,8 @@ namespace RideLinkerAPI.Controllers
 
             try
             {
-            var locations = await _locationService.GetAllAsync();
-            return Ok(locations);
+                var locations = await _locationService.GetAllAsync();
+                return Ok(locations);
             }
             catch (Exception ex)
             {
@@ -67,7 +67,9 @@ namespace RideLinkerAPI.Controllers
                     return BadRequest("Location data is null");
                 }
                 await _locationService.AddAsync(location);
-                return CreatedAtAction(nameof(GetLocationById), new { id = location.Id }, new { message = "Location created successfully", location });
+                var addedLocation = await _locationService.GetByIdAsync(location.Id);
+                return CreatedAtAction(nameof(GetLocationById), new { id = location.Id }, addedLocation);
+
             }
             catch (Exception ex)
             {

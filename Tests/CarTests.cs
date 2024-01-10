@@ -10,14 +10,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Tests
 {
-    public class CarControllerTests
+    public class CarTests
     {
         private readonly CarController _carController;
         private readonly Mock<ILogger<CarController>> _loggerMock;
         private readonly Mock<ICarService> _carServiceMock;
         private readonly Mock<ILocationService> _locationServiceMock;
 
-        public CarControllerTests()
+        public CarTests()
         {
             _loggerMock = new Mock<ILogger<CarController>>();
             _carServiceMock = new Mock<ICarService>();
