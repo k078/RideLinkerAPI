@@ -9,10 +9,10 @@ namespace RideLinkerAPI.Controllers
     [Route("api/[controller]")]
     public class TripController : ControllerBase
     {
-        private readonly ILogger<CarController> _logger;
+        private readonly ILogger<TripController> _logger;
         private readonly ITripService _tripService;
 
-        public TripController(ILogger<CarController> logger, ITripService tripService)
+        public TripController(ILogger<TripController> logger, ITripService tripService)
         {
             _logger = logger;
             _tripService = tripService;
@@ -104,6 +104,12 @@ namespace RideLinkerAPI.Controllers
 
             try
             {
+                var trip = await _tripService.GetByIdAsync(id);
+                if (trip == null)
+                {
+                    _logger.LogWarning($"Trip met id {id} niet gevonden");
+                    return NotFound($"Trip met id {id} niet gevonden");
+                }
                 await _tripService.DeleteAsync(id);
                 return Ok("Trip ID gedelete: " + id);
             }
