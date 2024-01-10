@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Core.Domain;
 using Core.DomainService.Interfaces;
+using Core.DomainService.Services;
 
 namespace RideLinkerAPI.Controllers
 {
@@ -9,10 +10,10 @@ namespace RideLinkerAPI.Controllers
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly ILogger<CarController> _logger;
+        private readonly ILogger<UserController> _logger;
         private readonly IUserService _userService;
 
-        public UserController(ILogger<CarController> logger, IUserService userService)
+        public UserController(ILogger<UserController> logger, IUserService userService)
         {
             _logger = logger;
             _userService = userService;
@@ -57,6 +58,12 @@ namespace RideLinkerAPI.Controllers
 
             try
             {
+                if (string.IsNullOrEmpty(inUser.Name))
+                {
+                    _logger.LogError("Naam is vereist voor het toevoegen van een gebruiker.");
+                    return BadRequest("Naam is vereist voor het toevoegen van een gebruiker.");
+                }
+
                 await _userService.AddAsync(inUser);
                 return Ok(inUser);
             }
@@ -66,6 +73,7 @@ namespace RideLinkerAPI.Controllers
                 return StatusCode(500, "Er is een interne fout opgetreden bij het toevoegen van een user.");
             }
         }
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, [FromBody] User updatedUser)
@@ -104,6 +112,13 @@ namespace RideLinkerAPI.Controllers
 
             try
             {
+                var car = await _userService.GetByIdAsync(id);
+                if (car == null)
+                {
+                    _logger.LogWarning($"User met id {id} niet gevonden");
+                    return NotFound("User met dit Id is niet gevonden.");
+                }
+
                 await _userService.DeleteAsync(id);
                 return Ok("User ID gedelete: " + id);
             }

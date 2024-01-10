@@ -69,6 +69,11 @@ namespace RideLinkerAPI.Controllers
                 {
                        return BadRequest("Locatie bestaat niet");
                 }
+                if (string.IsNullOrEmpty(inCar.Brand))
+                {
+                    return BadRequest("Merk (Brand) is vereist voor het toevoegen van een auto.");
+                }
+
                 inCar.Location = location;
                 await _carService.AddAsync(inCar);
                 return Ok(inCar);

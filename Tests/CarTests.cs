@@ -1,11 +1,8 @@
-using Xunit;
 using Moq;
 using Microsoft.Extensions.Logging;
 using RideLinkerAPI.Controllers;
 using Core.Domain;
 using Core.DomainService.Interfaces;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Tests
@@ -98,6 +95,22 @@ namespace Tests
             Assert.Equal(1, location.Id);
             Assert.Equal(location, model.Location);
         }
+        [Fact]
+        public async Task AddInvalidCar_ValidInput_ReturnsOkResult()
+        {
+            // Arrange
+            var inCar = new Car { Id = 1, LocationId = 1 };
+            var location = new Location { Id = 1, Name = "Location1" };
+            _locationServiceMock.Setup(service => service.GetByIdAsync(inCar.LocationId)).ReturnsAsync(location);
+
+            // Act
+            var result = await _carController.AddCar(inCar);
+
+            // Assert
+            var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+            Assert.Equal("Merk (Brand) is vereist voor het toevoegen van een auto.", badRequestResult.Value);
+
+        }
 
         [Fact]
         public async Task UpdateCar_ValidInput_ReturnsOkResult()
@@ -158,8 +171,10 @@ namespace Tests
             var result = await _carController.DeleteCar(carId);
 
             // Assert
+            var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
             Assert.IsType<NotFoundObjectResult>(result);
             Assert.Equal(404, ((NotFoundObjectResult)result).StatusCode);
+            Assert.Equal("Auto met dit Id is niet gevonden.", notFoundResult.Value);
         }
 
     }
