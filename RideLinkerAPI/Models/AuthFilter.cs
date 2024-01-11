@@ -8,7 +8,7 @@ public class AuthFilter : AuthorizeAttribute, IAuthorizationFilter
     {
         if (!context.HttpContext.User.Identity.IsAuthenticated)
         {
-            context.Result = new UnauthorizedObjectResult("U moet ingelogd zijn om deze informatie te bekijken");
+            context.Result = new UnauthorizedObjectResult("U moet ingelogd zijn om de API te kunnen gebruiken");
         }
     }
 }
