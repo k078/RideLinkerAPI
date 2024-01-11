@@ -19,6 +19,7 @@ namespace RideLinkerAPI.Controllers
         }
 
         [HttpGet]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> GetAllReservations()
         {
             _logger.LogInformation("GetAllReservations called");
@@ -36,6 +37,7 @@ namespace RideLinkerAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> GetReservationById(int id)
         {
             _logger.LogInformation($"GetReservationById({id}) called");
@@ -57,6 +59,7 @@ namespace RideLinkerAPI.Controllers
         }
 
         [HttpPost]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> AddReservation([FromBody] Reservation reservation)
         {
             _logger.LogInformation("AddReservation called");
@@ -77,6 +80,7 @@ namespace RideLinkerAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> UpdateReservation(int id, [FromBody] Reservation reservation)
         {
             _logger.LogInformation($"UpdateReservation({id}) called");
@@ -106,6 +110,7 @@ namespace RideLinkerAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> DeleteReservation(int id)
         {
             _logger.LogInformation($"DeleteReservation({id}) called");

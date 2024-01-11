@@ -40,6 +40,7 @@ namespace RideLinkerAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> GetCarById(int id)
         {
             _logger.LogInformation($"GetCarById({id}) aangeroepen");
@@ -55,6 +56,7 @@ namespace RideLinkerAPI.Controllers
         }
 
         [HttpPost()]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> AddCar([FromBody] Car inCar)
         {
             _logger.LogInformation("AddCar() aangeroepen");
@@ -87,6 +89,7 @@ namespace RideLinkerAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> UpdateCar(int id, [FromBody] Car updatedCar)
         {
             _logger.LogInformation($"UpdateCar({id}) aangeroepen");
@@ -117,6 +120,7 @@ namespace RideLinkerAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> DeleteCar(int id)
         {
             _logger.LogInformation($"DeleteCar({id}) aangeroepen");

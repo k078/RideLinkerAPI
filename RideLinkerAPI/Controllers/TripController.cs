@@ -18,6 +18,7 @@ namespace RideLinkerAPI.Controllers
             _tripService = tripService;
         }
         [HttpGet]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> GetAllTrips()
         {
             _logger.LogInformation("GetAllTrips() aangeroepen");
@@ -35,6 +36,7 @@ namespace RideLinkerAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> GetTripById(int id)
         {
             _logger.LogInformation($"GetTripById({id}) aangeroepen");
@@ -51,6 +53,7 @@ namespace RideLinkerAPI.Controllers
 
 
         [HttpPost()]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> AddTrip([FromBody] Trip inTrip)
         {
             _logger.LogInformation("AddTrip() aangeroepen");
@@ -68,6 +71,7 @@ namespace RideLinkerAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> UpdateTrip(int id, [FromBody] Trip updatedTrip)
         {
             _logger.LogInformation($"UpdateTrip({id}) aangeroepen");
@@ -98,6 +102,7 @@ namespace RideLinkerAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> DeleteTrip(int id)
         {
             _logger.LogInformation($"DeleteTrip({id}) aangeroepen");

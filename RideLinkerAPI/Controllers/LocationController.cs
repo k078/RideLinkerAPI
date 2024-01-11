@@ -20,6 +20,7 @@ namespace RideLinkerAPI.Controllers
         }
 
         [HttpGet]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> GetAllLocations()
         {
             _logger.LogInformation("GetAllLocations aangeroepen");
@@ -37,6 +38,7 @@ namespace RideLinkerAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> GetLocationById(int id)
         {
             _logger.LogInformation($"GetLocationById({id}) aangeroepen");
@@ -57,6 +59,7 @@ namespace RideLinkerAPI.Controllers
         }
 
         [HttpPost]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> AddLocation([FromBody] Location location)
         {
             _logger.LogInformation("AddLocation aangeroepen");
@@ -80,6 +83,7 @@ namespace RideLinkerAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> UpdateLocation(int id, [FromBody] Location location)
         {
             _logger.LogInformation($"UpdateLocation({id}) aangeroepen");
@@ -107,6 +111,7 @@ namespace RideLinkerAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> DeleteLocation(int id)
         {
             _logger.LogInformation($"DeleteLocation({id}) aangeroepen");
