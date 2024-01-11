@@ -22,6 +22,7 @@ namespace RideLinkerAPI.Controllers
         }
 
         [HttpGet]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> GetAllCars()
         {
             _logger.LogInformation("GetAllCars() aangeroepen");
