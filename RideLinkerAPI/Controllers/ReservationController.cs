@@ -100,7 +100,8 @@ namespace RideLinkerAPI.Controllers
 
                 reservation.Id = id;
                 await _reservationService.UpdateAsync(reservation);
-                return Ok(new { message = "Reservation updated successfully", reservation });
+                return Ok("Reservation updated successfully");
+
             }
             catch (Exception ex)
             {
