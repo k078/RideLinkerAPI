@@ -16,9 +16,15 @@ public class AppIdentityDbContext : IdentityDbContext<IdentityUser>
         modelBuilder.Entity<IdentityRole>().HasData(
             new IdentityRole
             {
-                Id = "fab4fac1-c546-41de-aebc-a14da6895711",
+                Id = "1",
                 Name = "ADMIN",
                 NormalizedName = "ADMIN"
+            },
+            new IdentityRole
+            {
+                Id ="2",
+                Name = "USER",
+                NormalizedName = "USER"
             }
         );
 
@@ -32,7 +38,7 @@ public class AppIdentityDbContext : IdentityDbContext<IdentityUser>
                 NormalizedEmail = "ADMIN@MAIL.COM",
                 EmailConfirmed = true,
                 PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(null, "Admin1234!"),
-                SecurityStamp = string.Empty
+                SecurityStamp = string.Empty,
             }
         );
     }

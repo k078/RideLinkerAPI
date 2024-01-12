@@ -90,13 +90,15 @@ namespace RideLinkerAPI.Controllers
                 var user = new IdentityUser
                 {
                     UserName = model.Email,
-                    Email = model.Email
+                    Email = model.Email,
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);
 
                 if (result.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync(user, "USER");
+
                     await _signInManager.SignInAsync(user, false);
                     return Ok("Account registered.");
                 }
@@ -110,6 +112,7 @@ namespace RideLinkerAPI.Controllers
 
             return BadRequest("Invalid registration attempt.");
         }
+
 
         [HttpPost("logout")]
         public async Task<IActionResult> Logout()
