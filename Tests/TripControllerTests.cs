@@ -146,6 +146,8 @@ namespace Tests
         {
             // Arrange
             var tripId = 1;
+            var trips = new List<Trip> { new Trip { Id = 1 }, new Trip { Id = 2 } };
+            _tripServiceMock.Setup(service => service.GetByIdAsync(tripId)).ReturnsAsync(trips.FirstOrDefault(t => t.Id == tripId));
             _tripServiceMock.Setup(service => service.DeleteAsync(tripId)).Returns(Task.CompletedTask);
 
             // Act
