@@ -22,6 +22,7 @@ namespace RideLinkerAPI.Controllers
         }
 
         [HttpGet]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> GetAllCars()
         {
             _logger.LogInformation("GetAllCars() aangeroepen");
@@ -39,6 +40,7 @@ namespace RideLinkerAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> GetCarById(int id)
         {
             _logger.LogInformation($"GetCarById({id}) aangeroepen");
@@ -54,6 +56,7 @@ namespace RideLinkerAPI.Controllers
         }
 
         [HttpPost()]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> AddCar([FromBody] Car inCar)
         {
             _logger.LogInformation("AddCar() aangeroepen");
@@ -69,6 +72,11 @@ namespace RideLinkerAPI.Controllers
                 {
                        return BadRequest("Locatie bestaat niet");
                 }
+                if (string.IsNullOrEmpty(inCar.Brand))
+                {
+                    return BadRequest("Merk (Brand) is vereist voor het toevoegen van een auto.");
+                }
+
                 inCar.Location = location;
                 await _carService.AddAsync(inCar);
                 return Ok(inCar);
@@ -81,6 +89,7 @@ namespace RideLinkerAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> UpdateCar(int id, [FromBody] Car updatedCar)
         {
             _logger.LogInformation($"UpdateCar({id}) aangeroepen");
@@ -111,12 +120,20 @@ namespace RideLinkerAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> DeleteCar(int id)
         {
             _logger.LogInformation($"DeleteCar({id}) aangeroepen");
 
             try
             {
+                var car = await _carService.GetByIdAsync(id);
+                if (car == null)
+                {
+                    _logger.LogWarning($"Auto met id {id} niet gevonden");
+                    return NotFound("Auto met dit Id is niet gevonden."); 
+                }
+
                 await _carService.DeleteAsync(id);
                 return Ok("Auto ID gedelete: " + id);
             }

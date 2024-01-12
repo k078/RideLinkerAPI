@@ -1,5 +1,6 @@
 ﻿using Core.Domain;
 using Core.DomainService.Interfaces;
+using Infrastructure.RL.Migrations;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -19,14 +20,15 @@ namespace RideLinkerAPI.Controllers
         }
 
         [HttpGet]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> GetAllLocations()
         {
             _logger.LogInformation("GetAllLocations aangeroepen");
 
             try
             {
-            var locations = await _locationService.GetAllAsync();
-            return Ok(locations);
+                var locations = await _locationService.GetAllAsync();
+                return Ok(locations);
             }
             catch (Exception ex)
             {
@@ -36,6 +38,7 @@ namespace RideLinkerAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> GetLocationById(int id)
         {
             _logger.LogInformation($"GetLocationById({id}) aangeroepen");
@@ -56,6 +59,7 @@ namespace RideLinkerAPI.Controllers
         }
 
         [HttpPost]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> AddLocation([FromBody] Location location)
         {
             _logger.LogInformation("AddLocation aangeroepen");
@@ -67,7 +71,9 @@ namespace RideLinkerAPI.Controllers
                     return BadRequest("Location data is null");
                 }
                 await _locationService.AddAsync(location);
-                return CreatedAtAction(nameof(GetLocationById), new { id = location.Id }, new { message = "Location created successfully", location });
+                var addedLocation = await _locationService.GetByIdAsync(location.Id);
+                return CreatedAtAction(nameof(GetLocationById), new { id = location.Id }, addedLocation);
+
             }
             catch (Exception ex)
             {
@@ -77,6 +83,7 @@ namespace RideLinkerAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> UpdateLocation(int id, [FromBody] Location location)
         {
             _logger.LogInformation($"UpdateLocation({id}) aangeroepen");
@@ -94,7 +101,7 @@ namespace RideLinkerAPI.Controllers
                 }
                 location.Id = id;
                 await _locationService.UpdateAsync(location);
-                return Ok(new { message = "Location updated successfully", location });
+                return Ok(location);
             }
             catch (Exception ex)
             {
@@ -104,6 +111,7 @@ namespace RideLinkerAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> DeleteLocation(int id)
         {
             _logger.LogInformation($"DeleteLocation({id}) aangeroepen");
@@ -116,7 +124,7 @@ namespace RideLinkerAPI.Controllers
                 }
 
                 await _locationService.DeleteAsync(id);
-                return Ok(new { message = "Location deleted successfully" });
+                return Ok($"Location ID gedelete: {location.Id}");
             }
             catch (Exception ex)
             {

@@ -4,6 +4,7 @@ using Infrastructure.RL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.RL.Migrations.AppIdentityDb
 {
     [DbContext(typeof(AppIdentityDbContext))]
-    partial class AppIdentityDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240111095146_users-refresh")]
+    partial class usersrefresh
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,15 +54,9 @@ namespace Infrastructure.RL.Migrations.AppIdentityDb
                     b.HasData(
                         new
                         {
-                            Id = "1",
+                            Id = "fab4fac1-c546-41de-aebc-a14da6895711",
                             Name = "ADMIN",
                             NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = "2",
-                            Name = "USER",
-                            NormalizedName = "USER"
                         });
                 });
 
@@ -157,13 +154,13 @@ namespace Infrastructure.RL.Migrations.AppIdentityDb
                         {
                             Id = "1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "5d14eb52-0557-47a5-9a87-fed4ba8b83be",
+                            ConcurrencyStamp = "e64384bf-c5a0-405b-a39d-89ae37dda323",
                             Email = "admin@mail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@MAIL.COM",
                             NormalizedUserName = "ADMIN@MAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEGO8hN09MUFi8DDyjETf5YwqZcIGJ8VzEn2xM7h8Lo3P3BwuASaEZjRLAcs4Jx0/oA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAENLIOVYmNrVZbuHDfM7iOZPbTiAM66SoC9fmABmmBsmIHRTnC1fPMwbRfjHiilqKLg==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,

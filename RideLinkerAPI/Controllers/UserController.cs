@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Core.Domain;
 using Core.DomainService.Interfaces;
+using Core.DomainService.Services;
 
 namespace RideLinkerAPI.Controllers
 {
@@ -9,15 +10,16 @@ namespace RideLinkerAPI.Controllers
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly ILogger<CarController> _logger;
+        private readonly ILogger<UserController> _logger;
         private readonly IUserService _userService;
 
-        public UserController(ILogger<CarController> logger, IUserService userService)
+        public UserController(ILogger<UserController> logger, IUserService userService)
         {
             _logger = logger;
             _userService = userService;
         }
         [HttpGet]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> GetAllUsers()
         {
             _logger.LogInformation("GetAllUsers() aangeroepen");
@@ -35,6 +37,7 @@ namespace RideLinkerAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> GetUserById(int id)
         {
             _logger.LogInformation($"GetUserById({id}) aangeroepen");
@@ -51,12 +54,19 @@ namespace RideLinkerAPI.Controllers
 
 
         [HttpPost()]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> AddUser([FromBody] User inUser)
         {
             _logger.LogInformation("AddUser() aangeroepen");
 
             try
             {
+                if (string.IsNullOrEmpty(inUser.Name))
+                {
+                    _logger.LogError("Naam is vereist voor het toevoegen van een gebruiker.");
+                    return BadRequest("Naam is vereist voor het toevoegen van een gebruiker.");
+                }
+
                 await _userService.AddAsync(inUser);
                 return Ok(inUser);
             }
@@ -67,7 +77,9 @@ namespace RideLinkerAPI.Controllers
             }
         }
 
+
         [HttpPut("{id}")]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> UpdateUser(int id, [FromBody] User updatedUser)
         {
             _logger.LogInformation($"UpdateUser({id}) aangeroepen");
@@ -98,12 +110,20 @@ namespace RideLinkerAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> DeleteUser(int id)
         {
             _logger.LogInformation($"DeleteUser({id}) aangeroepen");
 
             try
             {
+                var car = await _userService.GetByIdAsync(id);
+                if (car == null)
+                {
+                    _logger.LogWarning($"User met id {id} niet gevonden");
+                    return NotFound("User met dit Id is niet gevonden.");
+                }
+
                 await _userService.DeleteAsync(id);
                 return Ok("User ID gedelete: " + id);
             }

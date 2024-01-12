@@ -9,15 +9,16 @@ namespace RideLinkerAPI.Controllers
     [Route("api/[controller]")]
     public class TripController : ControllerBase
     {
-        private readonly ILogger<CarController> _logger;
+        private readonly ILogger<TripController> _logger;
         private readonly ITripService _tripService;
 
-        public TripController(ILogger<CarController> logger, ITripService tripService)
+        public TripController(ILogger<TripController> logger, ITripService tripService)
         {
             _logger = logger;
             _tripService = tripService;
         }
         [HttpGet]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> GetAllTrips()
         {
             _logger.LogInformation("GetAllTrips() aangeroepen");
@@ -35,6 +36,7 @@ namespace RideLinkerAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> GetTripById(int id)
         {
             _logger.LogInformation($"GetTripById({id}) aangeroepen");
@@ -51,6 +53,7 @@ namespace RideLinkerAPI.Controllers
 
 
         [HttpPost()]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> AddTrip([FromBody] Trip inTrip)
         {
             _logger.LogInformation("AddTrip() aangeroepen");
@@ -68,6 +71,7 @@ namespace RideLinkerAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> UpdateTrip(int id, [FromBody] Trip updatedTrip)
         {
             _logger.LogInformation($"UpdateTrip({id}) aangeroepen");
@@ -98,12 +102,19 @@ namespace RideLinkerAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> DeleteTrip(int id)
         {
             _logger.LogInformation($"DeleteTrip({id}) aangeroepen");
 
             try
             {
+                var trip = await _tripService.GetByIdAsync(id);
+                if (trip == null)
+                {
+                    _logger.LogWarning($"Trip met id {id} niet gevonden");
+                    return NotFound($"Trip met id {id} niet gevonden");
+                }
                 await _tripService.DeleteAsync(id);
                 return Ok("Trip ID gedelete: " + id);
             }
