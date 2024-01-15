@@ -190,3 +190,51 @@ Daarnaast zijn bepaalde ontwerpbeslissingen waarschijnlijk beïnvloed door de vo
 
 Over het algemeen ondersteunt het databaseontwerp de functionele vereisten van de ride-linking applicatie en biedt het een kader dat voldoet aan goede praktijken voor databasenormalisatie.
 
+```mermaid
+erDiagram
+    TRIPS ||--o{ RESERVATIONS : has
+    TRIPS ||--|| LOCATIONS : departure
+    TRIPS ||--|| LOCATIONS : destination
+    TRIPS ||--|| CARS : has
+    TRIPS ||--|| USERS : driver
+    USERS ||--o{ RESERVATIONS : makes
+    LOCATIONS ||--o{ CARS : has
+    TRIPS {
+        int Id PK
+        int DepartureId FK
+        int DestinationId FK
+        datetime StartTime
+        datetime EndTime
+        int CarId FK
+        int DriverId FK
+    }
+    LOCATIONS {
+        int Id PK
+        string Name
+        string Address
+    }
+    CARS {
+        int Id PK
+        string Brand
+        string Model
+        string Image
+        boolean Available
+        int LocationId FK
+    }
+    USERS {
+        int Id PK
+        string Name
+        datetime BirthDate
+        string Email
+        string MobileNr
+        string UserRole
+    }
+    RESERVATIONS {
+        int Id PK
+        int UserId FK
+        int TripId FK
+    }
+
+
+```
+
