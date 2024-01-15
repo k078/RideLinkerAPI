@@ -4,12 +4,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using RideLinkerAPI.Models;
+using Core.Domain;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Core.DomainService.Interfaces;
 
 namespace RideLinkerAPI.Controllers
 {
@@ -21,13 +23,15 @@ namespace RideLinkerAPI.Controllers
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IConfiguration _configuration;
         private readonly ILogger<AccountController> _logger;
+        private readonly IUserService _userService;
 
-        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IConfiguration configuration, ILogger<AccountController> logger)
+        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IConfiguration configuration, ILogger<AccountController> logger, IUserService userService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
             _logger = logger;
+            _userService = userService;
         }
 
         [HttpPost("login")]
@@ -123,9 +127,12 @@ namespace RideLinkerAPI.Controllers
 
         private async Task<string> GenerateJwtTokenAsync(IdentityUser user)
         {
+            int userId = await GetCustomUserIdAsync(user.Email);
+
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim("Id", userId.ToString()),
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email)
             };
@@ -148,6 +155,18 @@ namespace RideLinkerAPI.Controllers
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        private async Task<int> GetCustomUserIdAsync(string email)
+        {
+            User user = await _userService.GetByEmailAsync(email);
+            if (user != null)
+            {
+                return user.Id;
+            } else
+            {
+                return -1;
+            }
         }
     }
 }

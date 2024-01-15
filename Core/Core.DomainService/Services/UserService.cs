@@ -17,6 +17,11 @@ namespace Core.DomainService.Services
             _repo = repo;
         }
 
+        public Task<User> GetByEmailAsync(string email)
+        {
+            return _repo.GetByEmailAsync(email);
+        }
+
         public Task AddAsync(User user)
         {
             return _repo.AddAsync(user);
