@@ -10,9 +10,7 @@ namespace Core.Domain
     public class Reservation
     {
         public int Id { get; set; }
-        [JsonIgnore]
         public int UserId { get; set; }
-        [JsonIgnore]
         public int TripId { get; set; }
         public User? User { get; set; }
         public Trip? Trip { get; set; }
