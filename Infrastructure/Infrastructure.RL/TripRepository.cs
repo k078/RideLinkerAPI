@@ -64,5 +64,10 @@ namespace Infrastructure.RL
             _context.Trips.Remove(await _context.Trips.FindAsync(id));
             await _context.SaveChangesAsync();
         }
+
+        public async Task<bool> ExistsAsync(int tripId)
+        {
+            return await _context.Trips.AnyAsync(t => t.Id == tripId);
+        }
     }
 }

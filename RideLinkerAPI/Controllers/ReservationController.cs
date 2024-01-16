@@ -1,5 +1,6 @@
 ﻿using Core.Domain;
 using Core.DomainService.Interfaces;
+using Core.DomainService.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,11 +12,15 @@ namespace RideLinkerAPI.Controllers
     {
         private readonly ILogger<ReservationController> _logger;
         private readonly IReservationService _reservationService;
+        private readonly IUserService _userService;
+        private readonly ITripService _tripService;
 
-        public ReservationController(ILogger<ReservationController> logger, IReservationService reservationService)
+        public ReservationController(ILogger<ReservationController> logger, IReservationService reservationService, IUserService userService, ITripService tripService)
         {
             _logger = logger;
             _reservationService = reservationService;
+            _userService = userService;
+            _tripService = tripService;
         }
 
         [HttpGet]
@@ -62,14 +67,51 @@ namespace RideLinkerAPI.Controllers
         [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> AddReservation([FromBody] Reservation reservation)
         {
-            _logger.LogInformation("AddReservation called");
+            _logger.LogInformation("Attempting to add a new reservation.");
+            _logger.LogInformation($"Received reservation data: UserId={reservation.UserId}, TripId={reservation.TripId}");
+
+            if (reservation == null)
+            {
+                _logger.LogWarning("AddReservation called with null reservation object.");
+                return BadRequest("Reservation data cannot be null.");
+            }
+
+            if (reservation.UserId <= 0)
+            {
+                _logger.LogWarning("AddReservation called with invalid User ID.");
+                return BadRequest("A valid User ID is required.");
+            }
+            if (reservation.TripId <= 0)
+            {
+                _logger.LogWarning("AddReservation called with invalid Trip ID.");
+                return BadRequest("A valid Trip ID is required.");
+            }
+
+            bool userExists = await _userService.ExistsAsync(reservation.UserId);
+            if (!userExists)
+            {
+                _logger.LogWarning($"User with ID {reservation.UserId} does not exist.");
+                return BadRequest("User ID does not exist.");
+            }
+
+            bool tripExists = await _tripService.ExistsAsync(reservation.TripId);
+            if (!tripExists)
+            {
+                _logger.LogWarning($"Trip with ID {reservation.TripId} does not exist.");
+                return BadRequest("Trip ID does not exist.");
+            }
+
+            bool reservationExists = await _reservationService.ExistsAsync(reservation.UserId, reservation.TripId);
+            if (reservationExists)
+            {
+                _logger.LogWarning($"A reservation with User ID {reservation.UserId} and Trip ID {reservation.TripId} already exists.");
+                return Conflict("A reservation with the specified User ID and Trip ID already exists.");
+            }
+
             try
             {
-                if (reservation == null)
-                {
-                    return BadRequest("Reservation data is null");
-                }
                 await _reservationService.AddAsync(reservation);
+                _logger.LogInformation($"Reservation successfully created for User ID {reservation.UserId} and Trip ID {reservation.TripId}.");
                 return CreatedAtAction(nameof(GetReservationById), new { id = reservation.Id }, new { message = "Reservation created successfully", reservation });
             }
             catch (Exception ex)
