@@ -67,8 +67,7 @@ namespace RideLinkerAPI.Controllers
         [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> AddReservation([FromBody] Reservation reservation)
         {
-            _logger.LogInformation("Attempting to add a new reservation.");
-            _logger.LogInformation($"Received reservation data: UserId={reservation.UserId}, TripId={reservation.TripId}");
+            _logger.LogInformation("Attempting to add a new reservation.");       
 
             if (reservation == null)
             {
@@ -110,6 +109,8 @@ namespace RideLinkerAPI.Controllers
 
             try
             {
+                _logger.LogInformation($"Received reservation data: UserId={reservation.UserId}, TripId={reservation.TripId}");
+
                 await _reservationService.AddAsync(reservation);
                 _logger.LogInformation($"Reservation successfully created for User ID {reservation.UserId} and Trip ID {reservation.TripId}.");
                 return CreatedAtAction(nameof(GetReservationById), new { id = reservation.Id }, new { message = "Reservation created successfully", reservation });

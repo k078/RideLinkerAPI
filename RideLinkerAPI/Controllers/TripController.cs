@@ -11,11 +11,13 @@ namespace RideLinkerAPI.Controllers
     {
         private readonly ILogger<TripController> _logger;
         private readonly ITripService _tripService;
+        private readonly IReservationService _reservationService;
 
-        public TripController(ILogger<TripController> logger, ITripService tripService)
+        public TripController(ILogger<TripController> logger, ITripService tripService, IReservationService reservationService)
         {
             _logger = logger;
             _tripService = tripService;
+            _reservationService = reservationService;
         }
         [HttpGet]
         [ServiceFilter(typeof(AuthFilter))]
@@ -61,6 +63,13 @@ namespace RideLinkerAPI.Controllers
             try
             {
                 await _tripService.AddAsync(inTrip);
+                Reservation newReservation = new Reservation
+                {
+                    UserId = inTrip.DriverId,
+                    TripId = inTrip.Id,
+                };
+                await _reservationService.AddAsync(newReservation);
+                _logger.LogInformation("Maak reservation voor aangemaakte trip: " + newReservation);
                 return Ok(inTrip);
             }
             catch (Exception ex)

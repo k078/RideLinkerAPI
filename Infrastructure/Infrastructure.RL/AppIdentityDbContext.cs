@@ -39,6 +39,72 @@ public class AppIdentityDbContext : IdentityDbContext<IdentityUser>
                 EmailConfirmed = true,
                 PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(null, "Admin1234!"),
                 SecurityStamp = string.Empty,
+            },
+            new IdentityUser
+            {
+                Id = "2",
+                UserName = "hg@mail.com",
+                NormalizedUserName = "HG@MAIL.COM",
+                Email = "hg@mail.com",
+                NormalizedEmail = "HG@MAIL.COM",
+                EmailConfirmed = true,
+                PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(null, "Hg1234!"),
+                SecurityStamp = string.Empty,
+            },
+            new IdentityUser
+            {
+                Id = "3",
+                UserName = "sten@mail.com",
+                NormalizedUserName = "STEN@MAIL.COM",
+                Email = "sten@mail.com",
+                NormalizedEmail = "STEN@MAIL.COM",
+                EmailConfirmed = true,
+                PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(null, "Sten1234!"),
+                SecurityStamp = string.Empty,
+            },
+            new IdentityUser
+            {
+                Id = "4",
+                UserName = "kalle@mail.com",
+                NormalizedUserName = "KALLE@MAIL.COM",
+                Email = "kalle@mail.com",
+                NormalizedEmail = "KALLE@MAIL.COM",
+                EmailConfirmed = true,
+                PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(null, "Kalle1234!"),
+                SecurityStamp = string.Empty,
+            },
+            new IdentityUser
+            {
+                Id = "5",
+                UserName = "quinn@mail.com",
+                NormalizedUserName = "QUINN@MAIL.COM",
+                Email = "quinn@mail.com",
+                NormalizedEmail = "QUINN@MAIL.COM",
+                EmailConfirmed = true,
+                PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(null, "Quinn1234!"),
+                SecurityStamp = string.Empty,
+            },
+            new IdentityUser
+            {
+                Id = "6",
+                UserName = "matthijs@mail.com",
+                NormalizedUserName = "MATTHIJS@MAIL.COM",
+                Email = "matthijs@mail.com",
+                NormalizedEmail = "MATTHIJS@MAIL.COM",
+                EmailConfirmed = true,
+                PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(null, "Matthijs1234!"),
+                SecurityStamp = string.Empty,
+            },
+            new IdentityUser
+            {
+                Id = "7",
+                UserName = "baraa@mail.com",
+                NormalizedUserName = "BARAA@MAIL.COM",
+                Email = "baraa@mail.com",
+                NormalizedEmail = "BARAA@MAIL.COM",
+                EmailConfirmed = true,
+                PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(null, "Baraa1234!"),
+                SecurityStamp = string.Empty,
             }
         );
     }
