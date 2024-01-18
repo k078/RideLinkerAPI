@@ -73,11 +73,11 @@ namespace Infrastructure.RL
                 );
 
             modelBuilder.Entity<Reservation>().HasData(
-                new Reservation { Id = 1, UserId = 1, TripId = 1 },
+                new Reservation { Id = 1, UserId = 2, TripId = 1 },
                 new Reservation { Id = 2, UserId = 2, TripId = 2 },
-                new Reservation { Id = 3, UserId = 2, TripId = 3 },
-                new Reservation { Id = 4, UserId = 2, TripId = 4 },
-                new Reservation { Id = 5, UserId = 3, TripId = 5 },
+                new Reservation { Id = 3, UserId = 3, TripId = 3 },
+                new Reservation { Id = 4, UserId = 3, TripId = 4 },
+                new Reservation { Id = 5, UserId = 1, TripId = 5 },
                 new Reservation { Id = 6, UserId = 4, TripId = 6 },
                 new Reservation { Id = 7, UserId = 4, TripId = 7 },
                 new Reservation { Id = 8, UserId = 5, TripId = 8 },
