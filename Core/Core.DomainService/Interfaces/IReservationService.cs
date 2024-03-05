@@ -14,5 +14,7 @@ namespace Core.DomainService.Interfaces
         Task AddAsync(Reservation reservation);
         Task UpdateAsync(Reservation reservation);
         Task DeleteAsync(int id);
+        Task<bool> ExistsAsync(int userId, int tripId);
+
     }
 }

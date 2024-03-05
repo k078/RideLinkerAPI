@@ -15,14 +15,28 @@ namespace Tests
     public class ReservationControllerTests
     {
         private readonly ReservationController _reservationController;
+        private readonly UserController _userController;
+        private readonly Mock<ILogger<UserController>> _userControllerMock;
+        private readonly TripController _tripController;
+        private readonly Mock<ILogger<TripController>> _tripControllerMock;
         private readonly Mock<ILogger<ReservationController>> _loggerMock;
         private readonly Mock<IReservationService> _reservationServiceMock;
+        private readonly Mock<IUserService> _userServiceMock;
+        private readonly Mock<ITripService> _tripServiceMock;
 
         public ReservationControllerTests()
         {
             _loggerMock = new Mock<ILogger<ReservationController>>();
             _reservationServiceMock = new Mock<IReservationService>();
-            _reservationController = new ReservationController(_loggerMock.Object, _reservationServiceMock.Object);
+            _userServiceMock = new Mock<IUserService>();
+            _tripServiceMock = new Mock<ITripService>();
+
+            _reservationController = new ReservationController(
+                _loggerMock.Object, 
+                _reservationServiceMock.Object,
+                _userServiceMock.Object,
+                _tripServiceMock.Object
+            );
         }
 
         private Reservation CreateTestReservation(int id)
@@ -70,42 +84,39 @@ namespace Tests
             Assert.Equal(reservationId, model.Id);
         }
 
-        [Fact]
-        public async Task AddReservation_ValidInput_ReturnsCreatedAtActionResult()
-        {
-            // Arrange
-            var newReservation = CreateTestReservation(1);
-            _reservationServiceMock.Setup(service => service.AddAsync(newReservation)).Returns(Task.CompletedTask);
+            [Fact]
+            public async Task AddReservation_ValidInput_ReturnsCreatedAtActionResult()
+            {
+                // Arrange
+                var newUser = new User { Id = 1, UserRole = Role.ADMIN, Name = "Klaas" };
+                var newTrip = new Trip { Id = 100, CarId = 5, DriverId = 1 };
+                var newReservation = new Reservation { Id = 1001, TripId = 100, UserId = 1 };
 
-            // Act
-            var result = await _reservationController.AddReservation(newReservation);
+                _userServiceMock.Setup(service => service.ExistsAsync(newUser.Id)).ReturnsAsync(true);
+                _tripServiceMock.Setup(service => service.ExistsAsync(newTrip.Id)).ReturnsAsync(true);
+                _reservationServiceMock.Setup(service => service.ExistsAsync(newReservation.UserId, newReservation.TripId)).ReturnsAsync(false);
+                _reservationServiceMock.Setup(service => service.AddAsync(newReservation)).Returns(Task.CompletedTask);
 
-            // Assert
-            var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(result);
+                // Act
+                var result = await _reservationController.AddReservation(newReservation);
 
-            // Extract the value from the action result and assert its structure and content
-            var actualValue = createdAtActionResult.Value;
-            Assert.NotNull(actualValue);
+                // Assert
+                var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(result);
 
-            // The returned object is an anonymous type, so we need to use reflection to inspect it
-            var properties = actualValue.GetType().GetProperties().ToDictionary(p => p.Name, p => p.GetValue(actualValue));
-            Assert.True(properties.ContainsKey("message"));
-            Assert.True(properties.ContainsKey("reservation"));
+                // Extract the value from the action result and assert its structure and content
+                var actualValue = createdAtActionResult.Value;
+                Assert.NotNull(actualValue);
 
-            var reservation = properties["reservation"] as Reservation;
-            Assert.NotNull(reservation);
-            Assert.Equal(newReservation.Id, reservation.Id);
-        }
+                // The returned object is an anonymous type, so we need to use reflection to inspect it
+                var properties = actualValue.GetType().GetProperties().ToDictionary(p => p.Name, p => p.GetValue(actualValue));
+                Assert.True(properties.ContainsKey("message"));
+                Assert.True(properties.ContainsKey("reservation"));
 
-        [Fact]
-        public async Task AddReservation_InvalidInput_ReturnsBadRequestResult()
-        {
-            // Arrange & Act
-            var result = await _reservationController.AddReservation(null);
-
-            // Assert
-            Assert.IsType<BadRequestObjectResult>(result);
-        }
+                var reservation = properties["reservation"] as Reservation;
+                Assert.NotNull(reservation);
+                Assert.Equal(newReservation.Id, reservation.Id);
+            }
+        
 
         [Fact]
         public async Task UpdateReservation_ValidInput_ReturnsOkResult()

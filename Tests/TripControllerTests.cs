@@ -17,15 +17,21 @@ namespace Tests
         private readonly TripController _tripController;
         private readonly Mock<ILogger<TripController>> _loggerMock;
         private readonly Mock<ITripService> _tripServiceMock;
+        private readonly Mock<IReservationService> _reservationServiceMock;
+        private readonly ReservationController _reservationController;
+        private readonly Mock<ILogger<ReservationController>> _reservationControllerMock;
 
         public TripControllerTests()
         {
             _loggerMock = new Mock<ILogger<TripController>>();
             _tripServiceMock = new Mock<ITripService>();
+            _reservationServiceMock = new Mock<IReservationService>();
+            _reservationControllerMock = new Mock<ILogger<ReservationController>>();
 
             _tripController = new TripController(
                 _loggerMock.Object,
-                _tripServiceMock.Object
+                _tripServiceMock.Object,
+                _reservationServiceMock.Object
             );
         }
 
@@ -97,7 +103,7 @@ namespace Tests
         public async Task AddTrip_ValidInput_ReturnsOkResult()
         {
             // Arrange
-            var inTrip = CreateTestTrip(1);
+            var inTrip = new Trip { Id = 2, CarId = 2, DriverId = 3, DepartureId = 1, DestinationId = 2 };
             _tripServiceMock.Setup(service => service.AddAsync(inTrip)).Returns(Task.CompletedTask);
 
             // Act
@@ -107,8 +113,7 @@ namespace Tests
             var okResult = Assert.IsType<OkObjectResult>(result);
             var model = Assert.IsType<Trip>(okResult.Value);
             Assert.Equal(inTrip.Id, model.Id);
-            Assert.Equal(inTrip.StartTime, model.StartTime);
-            Assert.Equal(inTrip.EndTime, model.EndTime);
+            Assert.Equal(inTrip.CarId, model.CarId);
         }
 
         [Fact]

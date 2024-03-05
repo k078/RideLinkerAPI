@@ -4,6 +4,7 @@ using Infrastructure.RL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.RL.Migrations
 {
     [DbContext(typeof(RideLinkerDbContext))]
-    partial class RideLinkerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240117110158_TripAndReservation")]
+    partial class TripAndReservation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -211,7 +214,7 @@ namespace Infrastructure.RL.Migrations
                         {
                             Id = 1,
                             TripId = 1,
-                            UserId = 2
+                            UserId = 1
                         },
                         new
                         {
@@ -223,19 +226,19 @@ namespace Infrastructure.RL.Migrations
                         {
                             Id = 3,
                             TripId = 3,
-                            UserId = 3
+                            UserId = 2
                         },
                         new
                         {
                             Id = 4,
                             TripId = 4,
-                            UserId = 3
+                            UserId = 2
                         },
                         new
                         {
                             Id = 5,
                             TripId = 5,
-                            UserId = 1
+                            UserId = 3
                         },
                         new
                         {

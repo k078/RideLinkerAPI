@@ -46,5 +46,10 @@ namespace Core.DomainService.Services
         {
             return _repo.UpdateAsync(user);
         }
+
+        public async Task<bool> ExistsAsync(int userId)
+        {
+            return await _repo.ExistsAsync(userId);
+        }
     }
 }

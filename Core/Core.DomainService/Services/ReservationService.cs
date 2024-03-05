@@ -62,5 +62,10 @@ namespace Core.DomainService.Services
                 await _reservationRepository.DeleteAsync(reservation);
             }
         }
+
+        public async Task<bool> ExistsAsync(int userId, int tripId)
+        {
+            return await _reservationRepository.ExistsAsync(userId, tripId);
+        }
     }
 }

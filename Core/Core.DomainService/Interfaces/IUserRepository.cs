@@ -15,5 +15,6 @@ namespace Core.DomainService.Interfaces
         Task AddAsync(User user);
         Task UpdateAsync(User user);
         Task DeleteAsync(int id);
+        Task<bool> ExistsAsync(int userId);
     }
 }

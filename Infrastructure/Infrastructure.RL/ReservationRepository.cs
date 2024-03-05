@@ -51,5 +51,11 @@ namespace Infrastructure.RL
             _context.Reservations.Remove(reservation);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<bool> ExistsAsync(int userId, int tripId)
+        {
+            return await _context.Reservations
+                .AnyAsync(r => r.UserId == userId && r.TripId == tripId);
+        }
     }
 }

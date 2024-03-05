@@ -14,5 +14,6 @@ namespace Core.DomainService.Interfaces
         Task AddAsync(Trip trip);
         Task UpdateAsync(Trip trip);
         Task DeleteAsync(int id);
+        Task<bool> ExistsAsync(int tripId);
     }
 }

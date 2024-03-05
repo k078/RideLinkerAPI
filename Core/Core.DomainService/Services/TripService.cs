@@ -41,5 +41,10 @@ namespace Core.DomainService.Services
         {
             return _repo.DeleteAsync(id);
         }
+
+        public async Task<bool> ExistsAsync(int tripId)
+        {
+            return await _repo.ExistsAsync(tripId);
+        }
     }
 }
