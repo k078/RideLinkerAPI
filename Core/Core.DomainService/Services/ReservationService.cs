@@ -53,7 +53,6 @@ namespace Core.DomainService.Services
             }
         }
 
-
         public async Task DeleteAsync(int id)
         {
             var reservation = await GetByIdAsync(id);

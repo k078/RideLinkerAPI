@@ -12,7 +12,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<ICarRepository, CarRepository>();
 builder.Services.AddScoped<ICarService, CarService>();
-//builder.Services.AddScoped<AccountController, AccountController>();
 builder.Services.AddScoped<ILocationRepository, LocationRepository>();
 builder.Services.AddScoped<ILocationService, LocationService>();
 builder.Services.AddScoped<ITripRepository, TripRepository>();  
