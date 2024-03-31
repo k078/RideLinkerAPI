@@ -133,5 +133,31 @@ namespace RideLinkerAPI.Controllers
                 return StatusCode(500, "Er is een interne fout opgetreden bij het verwijderen van de trip.");
             }
         }
+
+
+        [HttpGet("active")]
+        [ServiceFilter(typeof(AuthFilter))]
+        public async Task<IActionResult> GetActiveTrips()
+        {
+            try
+            {
+                var activeTrips = await _tripService.GetActiveTripsAsync();
+                if (activeTrips.Any())
+                {
+                    return Ok(activeTrips);
+                }
+                else
+                {
+                    _logger.LogWarning("Geen actieve ritten gevonden");
+                    return NotFound("Geen actieve ritten gevonden");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Fout bij het ophalen van actieve ritten: {ex.Message}");
+                return StatusCode(500, "Er is een interne fout opgetreden bij het ophalen van actieve ritten.");
+            }
+        }
+
     }
 }
