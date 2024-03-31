@@ -46,5 +46,10 @@ namespace Core.DomainService.Services
         {
             return await _repo.ExistsAsync(tripId);
         }
+
+        public async Task<IEnumerable<Trip>> GetActiveTripsAsync()
+        {
+            return await _repo.GetActiveTripsAsync();
+        }
     }
 }
