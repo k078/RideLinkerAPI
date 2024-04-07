@@ -69,5 +69,22 @@ namespace Infrastructure.RL
         {
             return await _context.Trips.AnyAsync(t => t.Id == tripId);
         }
+
+        public async Task<IEnumerable<Trip>> GetActiveTripsAsync()
+        {
+            //var now = DateTime.UtcNow;
+            var amsterdamTimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+            // Zet UTC om naar de lokale tijd van Amsterdam
+            var currentTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, amsterdamTimeZone);
+            var activeTrips = await _context.Trips
+                .Include(t => t.Car)
+                .Include(t => t.Driver)
+                .Include(t => t.Departure)
+                .Include(t => t.Destination)
+                .Where(t => t.EndTime > currentTime && t.StartTime <= currentTime)
+                .ToListAsync();
+
+            return activeTrips;
+        }
     }
 }
